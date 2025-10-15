@@ -51,7 +51,7 @@ Vision-based grasping is essential for industrial and household robotics but rem
 
 ## Main Results
 
-<div>
+<div align="center">
 
 <table>
 <tr>
@@ -189,14 +189,13 @@ python evaluate.py
 ## Real-World Experiments
 
 This repository includes the code used for **real-world robotic grasping experiments**.  
-To perform experiments using an actual robotic arm, run:
+The code path for the real-world experiment is `./robot/predict.py`. To perform experiments using an actual robotic arm, run:
 
 ```bash
 python predict.py
 ```
 
-The script `predict.py` connects to a **UR robotic arm** equipped with an **Intel RealSense D435** depth camera and a **Robotiq 2F-85** parallel gripper.  
-It performs **real-time grasp detection and execution** using the trained D2TriPO-DETR model.  
+The script `predict.py` connects to a **UR robotic arm** equipped with an **Intel RealSense D435** depth camera and a **Robotiq 2F-85** parallel gripper.  It performs **real-time grasp detection and execution** using the trained D2TriPO-DETR model.  
 Before running, ensure that the robot, gripper, and camera are properly connected and configured.
 
 ---
