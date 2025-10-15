@@ -1,0 +1,80 @@
+[10/08 19:40:25.212]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/08 19:40:25.214]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py
+[10/08 19:42:27.260]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/08 19:42:27.261]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py
+[10/08 19:46:29.720]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/08 19:46:29.721]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py
+[10/08 19:54:10.135]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/08 19:54:10.136]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py
+[10/08 20:34:02.179]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/08 20:34:02.180]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py
+[10/08 20:44:06.122]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/08 20:44:06.124]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py
+[10/09 18:49:19.164]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/09 18:49:19.165]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py
+[10/10 10:46:17.996]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 10:46:17.997]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py
+[10/10 10:55:43.962]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 10:55:43.963]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py
+[10/10 10:58:43.089]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 10:58:43.090]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py
+[10/10 19:23:42.184]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 19:23:42.185]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py
+[10/10 19:25:40.667]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 19:25:40.669]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py
+[10/10 19:27:05.524]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 19:27:05.525]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py
+[10/10 19:41:39.044]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 19:41:39.045]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py
+[10/10 19:46:15.034]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 19:46:15.035]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py
+[10/10 19:55:30.110]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 19:55:30.111]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py
+[10/10 20:04:24.650]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 20:04:24.651]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py
+[10/10 20:10:25.869]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 20:10:25.869]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py
+[10/10 20:11:37.897]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 20:11:37.898]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py
+[10/10 20:26:04.356]: git:
+  sha: N/A, status: clean, branch: N/A
+
+[10/10 20:26:04.356]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py

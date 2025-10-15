@@ -1,0 +1,137 @@
+2024-10-08 19:42:22,325 INFO    StreamThr :14701 [internal.py:wandb_internal():85] W&B internal server running at pid: 14701, started at: 2024-10-08 19:42:22.319314
+2024-10-08 19:42:22,341 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status
+2024-10-08 19:42:22,354 INFO    WriterThread:14701 [datastore.py:open_for_write():87] open: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/run-muqjm64z.wandb
+2024-10-08 19:42:22,357 DEBUG   SenderThread:14701 [sender.py:send():391] send: header
+2024-10-08 19:42:22,357 DEBUG   SenderThread:14701 [sender.py:send():391] send: run
+2024-10-08 19:42:23,230 INFO    SenderThread:14701 [dir_watcher.py:__init__():211] watching files in: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files
+2024-10-08 19:42:23,231 INFO    SenderThread:14701 [sender.py:_start_run_threads():1200] run started: muqjm64z with start time 1728387742.31323
+2024-10-08 19:42:23,257 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: run_start
+2024-10-08 19:42:23,315 DEBUG   HandlerThread:14701 [system_info.py:__init__():26] System info init
+2024-10-08 19:42:23,316 DEBUG   HandlerThread:14701 [system_info.py:__init__():41] System info init done
+2024-10-08 19:42:23,316 INFO    HandlerThread:14701 [system_monitor.py:start():194] Starting system monitor
+2024-10-08 19:42:23,318 INFO    HandlerThread:14701 [system_monitor.py:probe():214] Collecting system info
+2024-10-08 19:42:23,319 INFO    SystemMonitor:14701 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-10-08 19:42:23,323 INFO    SystemMonitor:14701 [interfaces.py:start():188] Started cpu monitoring
+2024-10-08 19:42:23,334 INFO    SystemMonitor:14701 [interfaces.py:start():188] Started disk monitoring
+2024-10-08 19:42:23,341 INFO    SystemMonitor:14701 [interfaces.py:start():188] Started gpu monitoring
+2024-10-08 19:42:23,350 INFO    SystemMonitor:14701 [interfaces.py:start():188] Started memory monitoring
+2024-10-08 19:42:23,360 INFO    SystemMonitor:14701 [interfaces.py:start():188] Started network monitoring
+2024-10-08 19:42:23,399 DEBUG   HandlerThread:14701 [system_info.py:probe():152] Probing system
+2024-10-08 19:42:23,407 DEBUG   HandlerThread:14701 [gitlib.py:_init_repo():56] git repository is invalid
+2024-10-08 19:42:23,407 DEBUG   HandlerThread:14701 [system_info.py:probe():200] Probing system done
+2024-10-08 19:42:23,408 DEBUG   HandlerThread:14701 [system_monitor.py:probe():223] {'os': 'Linux-5.4.0-150-generic-x86_64-with-glibc2.17', 'python': '3.8.19', 'heartbeatAt': '2024-10-08T11:42:23.399393', 'startedAt': '2024-10-08T11:42:22.300971', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py', 'codePathLocal': 'code/dab_deformable_resnet_5d_Rotate_Point/main.py', 'codePath': 'code/dab_deformable_resnet_5d_Rotate_Point/main.py', 'host': 'czp-Super-Server', 'username': 'pmh', 'executable': '/home/pmh/anaconda3/envs/detr/bin/python', 'cpu_count': 12, 'cpu_count_logical': 24, 'cpu_freq': {'current': 1163.6986666666664, 'min': 800.0, 'max': 2001.0}, 'cpu_freq_per_core': [{'current': 800.21, 'min': 800.0, 'max': 2001.0}, {'current': 1999.921, 'min': 800.0, 'max': 2001.0}, {'current': 915.038, 'min': 800.0, 'max': 2001.0}, {'current': 800.137, 'min': 800.0, 'max': 2001.0}, {'current': 974.812, 'min': 800.0, 'max': 2001.0}, {'current': 1196.475, 'min': 800.0, 'max': 2001.0}, {'current': 1212.774, 'min': 800.0, 'max': 2001.0}, {'current': 2000.0, 'min': 800.0, 'max': 2001.0}, {'current': 1175.496, 'min': 800.0, 'max': 2001.0}, {'current': 800.44, 'min': 800.0, 'max': 2001.0}, {'current': 934.156, 'min': 800.0, 'max': 2001.0}, {'current': 857.041, 'min': 800.0, 'max': 2001.0}, {'current': 800.295, 'min': 800.0, 'max': 2001.0}, {'current': 2000.0, 'min': 800.0, 'max': 2001.0}, {'current': 936.322, 'min': 800.0, 'max': 2001.0}, {'current': 800.188, 'min': 800.0, 'max': 2001.0}, {'current': 959.442, 'min': 800.0, 'max': 2001.0}, {'current': 1121.279, 'min': 800.0, 'max': 2001.0}, {'current': 1253.092, 'min': 800.0, 'max': 2001.0}, {'current': 2000.156, 'min': 800.0, 'max': 2001.0}, {'current': 1192.987, 'min': 800.0, 'max': 2001.0}, {'current': 833.493, 'min': 800.0, 'max': 2001.0}, {'current': 938.674, 'min': 800.0, 'max': 2001.0}, {'current': 848.403, 'min': 800.0, 'max': 2001.0}], 'disk': {'/': {'total': 93.31179428100586, 'used': 18.214313507080078}}, 'gpu': 'NVIDIA RTX A6000', 'gpu_count': 2, 'gpu_devices': [{'name': 'NVIDIA RTX A6000', 'memory_total': 51527024640}, {'name': 'NVIDIA RTX A6000', 'memory_total': 51527024640}], 'memory': {'total': 125.51963806152344}}
+2024-10-08 19:42:23,408 INFO    HandlerThread:14701 [system_monitor.py:probe():224] Finished collecting system info
+2024-10-08 19:42:23,408 INFO    HandlerThread:14701 [system_monitor.py:probe():227] Publishing system info
+2024-10-08 19:42:23,408 DEBUG   HandlerThread:14701 [system_info.py:_save_conda():209] Saving list of conda packages installed into the current environment
+2024-10-08 19:42:24,245 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/conda-environment.yaml
+2024-10-08 19:42:27,007 DEBUG   HandlerThread:14701 [system_info.py:_save_conda():224] Saving conda packages done
+2024-10-08 19:42:27,015 INFO    HandlerThread:14701 [system_monitor.py:probe():229] Finished publishing system info
+2024-10-08 19:42:27,023 DEBUG   SenderThread:14701 [sender.py:send():391] send: files
+2024-10-08 19:42:27,024 INFO    SenderThread:14701 [sender.py:_save_file():1466] saving file wandb-metadata.json with policy now
+2024-10-08 19:42:27,220 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: python_packages
+2024-10-08 19:42:27,221 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: python_packages
+2024-10-08 19:42:27,226 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:42:27,227 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:42:27,243 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:42:27,244 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/conda-environment.yaml
+2024-10-08 19:42:27,245 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/requirements.txt
+2024-10-08 19:42:27,247 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/wandb-metadata.json
+2024-10-08 19:42:27,614 DEBUG   SenderThread:14701 [sender.py:send():391] send: telemetry
+2024-10-08 19:42:27,615 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:42:28,048 INFO    wandb-upload_0:14701 [upload_job.py:push():130] Uploaded file /tmp/tmpdo848hvuwandb/0p3jqlky-wandb-metadata.json
+2024-10-08 19:42:28,244 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/output.log
+2024-10-08 19:42:30,246 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/output.log
+2024-10-08 19:42:32,771 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:42:34,287 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/output.log
+2024-10-08 19:42:37,236 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:42:38,232 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:42:42,224 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:42:42,226 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:42:43,578 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:42:47,237 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:42:49,232 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:42:54,238 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:42:55,306 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/config.yaml
+2024-10-08 19:42:57,224 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:42:57,226 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:42:57,267 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:42:59,665 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:43:05,234 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:43:07,237 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:43:11,234 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:43:12,225 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:43:12,226 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:43:16,514 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:43:17,237 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:43:22,233 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:43:23,361 DEBUG   SystemMonitor:14701 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-10-08 19:43:23,369 DEBUG   SenderThread:14701 [sender.py:send():391] send: stats
+2024-10-08 19:43:27,225 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:43:27,226 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:43:27,267 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:43:27,532 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:43:33,233 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:43:37,238 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:43:38,235 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:43:42,225 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:43:42,227 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:43:43,525 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:43:47,238 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:43:49,236 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:43:53,389 DEBUG   SenderThread:14701 [sender.py:send():391] send: stats
+2024-10-08 19:43:54,392 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:43:57,225 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:43:57,227 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:43:57,241 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:43:59,581 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:44:05,236 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:44:07,238 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:44:10,237 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:44:12,226 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:44:12,227 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:44:15,522 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:44:17,239 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:44:21,237 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:44:23,377 DEBUG   SenderThread:14701 [sender.py:send():391] send: stats
+2024-10-08 19:44:26,380 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:44:27,226 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:44:27,227 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:44:27,267 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:44:31,541 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:44:37,237 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:44:37,239 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:44:42,226 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:44:42,228 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:44:42,577 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:44:47,240 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:44:48,238 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:44:52,418 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/output.log
+2024-10-08 19:44:53,239 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:44:53,380 DEBUG   SenderThread:14701 [sender.py:send():391] send: stats
+2024-10-08 19:44:56,422 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/output.log
+2024-10-08 19:44:57,227 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:44:57,229 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:44:57,241 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:44:58,424 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/output.log
+2024-10-08 19:44:58,585 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:45:04,266 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:45:07,240 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:45:10,240 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:45:12,227 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:45:12,229 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:45:15,507 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:45:17,240 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:45:17,476 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/output.log
+2024-10-08 19:45:21,240 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:45:23,384 DEBUG   SenderThread:14701 [sender.py:send():391] send: stats
+2024-10-08 19:45:26,388 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:45:27,228 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:45:27,229 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:45:27,243 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:45:31,540 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:45:37,092 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report
+2024-10-08 19:45:37,241 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-08 19:45:37,496 INFO    Thread-17 :14701 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194222-muqjm64z/files/output.log
+2024-10-08 19:45:42,228 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-08 19:45:42,229 DEBUG   SenderThread:14701 [sender.py:send_request():418] send_request: stop_status
+2024-10-08 19:45:42,567 DEBUG   HandlerThread:14701 [handler.py:handle_request():158] handle_request: status_report

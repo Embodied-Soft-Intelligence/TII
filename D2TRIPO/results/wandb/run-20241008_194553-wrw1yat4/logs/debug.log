@@ -1,0 +1,20 @@
+2024-10-08 19:45:53,861 INFO    MainThread:17932 [wandb_setup.py:_flush():77] Current SDK version is 0.17.8
+2024-10-08 19:45:53,861 INFO    MainThread:17932 [wandb_setup.py:_flush():77] Configure stats pid to 17932
+2024-10-08 19:45:53,861 INFO    MainThread:17932 [wandb_setup.py:_flush():77] Loading settings from /home/pmh/.config/wandb/settings
+2024-10-08 19:45:53,861 INFO    MainThread:17932 [wandb_setup.py:_flush():77] Loading settings from /home/pmh/wandb/settings
+2024-10-08 19:45:53,862 INFO    MainThread:17932 [wandb_setup.py:_flush():77] Loading settings from environment variables: {}
+2024-10-08 19:45:53,862 INFO    MainThread:17932 [wandb_setup.py:_flush():77] Inferring run settings from compute environment: {'program_relpath': 'code/dab_deformable_resnet_5d_Rotate_Point/main.py', 'program_abspath': '/home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py', 'program': '/home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/main.py'}
+2024-10-08 19:45:53,862 INFO    MainThread:17932 [wandb_setup.py:_flush():77] Applying login settings: {}
+2024-10-08 19:45:53,862 INFO    MainThread:17932 [wandb_setup.py:_flush():77] Applying login settings: {}
+2024-10-08 19:45:53,862 INFO    MainThread:17932 [wandb_init.py:_log_setup():524] Logging user logs to /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194553-wrw1yat4/logs/debug.log
+2024-10-08 19:45:53,862 INFO    MainThread:17932 [wandb_init.py:_log_setup():525] Logging internal logs to /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point/results/wandb/run-20241008_194553-wrw1yat4/logs/debug-internal.log
+2024-10-08 19:45:53,862 INFO    MainThread:17932 [wandb_init.py:init():607] calling init triggers
+2024-10-08 19:45:53,862 INFO    MainThread:17932 [wandb_init.py:init():614] wandb.init called with sweep_config: {}
+config: {}
+2024-10-08 19:45:53,863 INFO    MainThread:17932 [wandb_init.py:init():657] starting backend
+2024-10-08 19:45:53,863 INFO    MainThread:17932 [wandb_init.py:init():661] setting up manager
+2024-10-08 19:45:53,865 INFO    MainThread:17932 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-10-08 19:45:53,870 INFO    MainThread:17932 [wandb_init.py:init():669] backend started and connected
+2024-10-08 19:45:53,878 INFO    MainThread:17932 [wandb_init.py:init():767] updated telemetry
+2024-10-08 19:45:53,879 INFO    MainThread:17932 [wandb_init.py:init():800] communicating run to backend with 90.0 second timeout
+2024-10-08 19:45:54,635 INFO    MainThread:17932 [wandb_init.py:init():851] starting run threads in backend
