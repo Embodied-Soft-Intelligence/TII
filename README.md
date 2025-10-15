@@ -37,9 +37,13 @@ This repository is an official implementation of the paper [D2TriPO-DETR: Dual-D
 
 D2TriPO-DETR is an end-to-end vision-based grasp detection framework designed for object-stacking scenarios. It adopts a dual-decoder transformer architecture with **triple-parallel outputs**: object detection, manipulation relationship reasoning, and grasp detection. Two modules — Distributed Attention Perception (DAP) and Visual Attention Adaptation (VAA) — are integrated to improve inter-object relational reasoning and viewpoint adaptation.
 
+---
+
 ## Abstract
 
 Vision-based grasping is essential for industrial and household robotics but remains challenging in stacked-object scenarios. We introduce D2TriPO-DETR, a dual-decoder transformer producing three parallel outputs for object detection, manipulation relationship reasoning, and grasp detection. Producing the three outputs concurrently reduces error propagation between subtasks. On the Visual Manipulation Relationship Dataset (VMRD), D2TriPO-DETR outperforms prior methods on several key metrics and demonstrates strong real-world performance on a UR3 robot equipped with a parallel gripper.
+
+---
 
 ## Features
 
@@ -48,6 +52,8 @@ Vision-based grasping is essential for industrial and household robotics but rem
 - Modules for distributed attention and viewpoint adaptation
 - Training and evaluation recipes compatible with Deformable-DETR-style codebases
 - Real-robot validation (UR3 + RealSense + Robotiq gripper)
+
+---
 
 ## Main Results
 
@@ -94,6 +100,8 @@ Vision-based grasping is essential for industrial and household robotics but rem
 </div>
 
 > All D2TriPO-DETR experiments reported here used a total batch size of 4 (see code for implementation details).
+
+---
 
 ## Real-World Experiment Results
 
@@ -195,8 +203,7 @@ The code path for the real-world experiment is `./robot/predict.py`. To perform 
 python predict.py
 ```
 
-The script `predict.py` connects to a **UR robotic arm** equipped with an **Intel RealSense D435** depth camera and a **Robotiq 2F-85** parallel gripper.  It performs **real-time grasp detection and execution** using the trained D2TriPO-DETR model.  
-Before running, ensure that the robot, gripper, and camera are properly connected and configured.
+The script `predict.py` connects to a **UR robotic arm** equipped with an **Intel RealSense D435** depth camera and a **Robotiq 2F-85** parallel gripper.  It performs **real-time grasp detection and execution** using the trained D2TriPO-DETR model.  Before running, ensure that the robot, gripper, and camera are properly connected and configured.
 
 ---
 
