@@ -49,7 +49,7 @@ Vision-based grasping is essential for industrial and household robotics but rem
 - Training and evaluation recipes compatible with Deformable-DETR-style codebases
 - Real-robot validation (UR3 + RealSense + Robotiq gripper)
 
-## Results
+## Main Results
 
 <div>
 
@@ -95,6 +95,10 @@ Vision-based grasping is essential for industrial and household robotics but rem
 
 > All D2TriPO-DETR experiments reported here used a total batch size of 4 (see code for implementation details).
 
+## Real-World Experiment Results
+
+<div align="center"> <table> <tr> <th>Models</th> <th>Cluttered Scenes (%)</th> <th>Stacked Scenes (%)</th> </tr> <tr> <td>Mutli-Task CNN[8]</td> <td align="center">90.60</td> <td align="center">65.65</td> </tr> <tr> <td>SMTNet[35]</td> <td align="center">86.13</td> <td align="center">65.00</td> </tr> <tr> <td>EGNet[5]</td> <td align="center">93.60</td> <td align="center">69.60</td> </tr> <tr> <td><strong>D2TriPO-DETR (Ours)</strong></td> <td align="center"><strong>95.71</strong></td> <td align="center"><strong>74.29</strong></td> </tr> </table> </div>
+
 ---
 
 ## Requirements
@@ -118,44 +122,66 @@ conda install pytorch=1.13.1 torchvision=0.14.1 cudatoolkit=11.6 -c pytorch -y
 pip install -r requirements.txt
 ```
 
+## Compiling CUDA operators
+
+```bash
+cd ./models/dab_deformable_detr/ops
+sh ./make.sh
+# unit test (should see all checking is True)
+python test.py
+```
 ---
 
-## Dataset Preparation
+## Usage
+### Dataset Preparation
 
-Organize the VMRD dataset as follows:
+Please download VMRD dataset and organize them as following:
 
 ```
-data/vmrd/
-  ├── adj/
-  ├── grasps/
-  ├── images/
-  └── labels/
+code_root/
+└── data/
+    └── vmrd/
+        ├── adj/
+        	├── train
+        	└── val
+               └──00001.txt
+        └── grasps/
+        	├── train
+        	└── val
+               └──00001.txt
+        └── images/
+        	├── train
+        	└── val
+               └──00001.jpg
+        └── labels/
+        	├── train
+        	└── val
+               └──00001.txt
+        └── xml/
+        	├── train
+        	└── val
+               └──00001.xml
 ```
 
 ---
 
-## Training
+### Training
 
-Example (4 GPUs):
+To train the baseline D2TriPO-DETR on a single node with 4 GPUs for 120 epochs, first modify the dataset path in `./datasets/vmrd.py`, then download the resnet101_doubledetr weight file and place it in the project root directory, and finally run the following command:
 
 ```bash
 CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node=4 --use_env main.py
 ```
+120 epoch training takes around 15 hours on a single machine with 4 RTX4090 cards. To ease reproduction of our results we provide results for the best checkpoint.pth for 120 epoch, achieving 88.6 accuracy.
+We train D2TriPO-DETR with the AdamW optimizer, using a learning rate of 1e-4 for the transformer and 1e-5 for the backbone, and a weight decay of 1e-4. Training uses a batch size of 4 for 120 epochs, with the learning rate dropped at epoch 80. Data augmentation includes horizontal flipping, random scaling, and random cropping. The transformer uses a dropout of 0.1, and gradient clipping with a maximum norm of 0.1 is applied to stabilize training.
 
 ---
 
-## Evaluation
+### Evaluation
 
+You can obtain the configuration file and pretrained model of D2TriPO-DETR, then modify the folder path of the weight files to be batch-evaluated and the batch size in the evaluation script, and run :
 ```bash
 python evaluate.py
-```
-
----
-
-## Inference / Demo
-
-```bash
-python demo.py --img_path ./demo_images/example.jpg
 ```
 
 ---
@@ -175,19 +201,9 @@ Before running, ensure that the robot, gripper, and camera are properly connecte
 
 ---
 
-## Real-World Experiment Results
-
-<div align="center"> <table> <tr> <th>Models</th> <th>Cluttered Scenes (%)</th> <th>Stacked Scenes (%)</th> </tr> <tr> <td>Mutli-Task CNN[8]</td> <td align="center">90.60</td> <td align="center">65.65</td> </tr> <tr> <td>SMTNet[35]</td> <td align="center">86.13</td> <td align="center">65.00</td> </tr> <tr> <td>EGNet[5]</td> <td align="center">93.60</td> <td align="center">69.60</td> </tr> <tr> <td><strong>D2TriPO-DETR (Ours)</strong></td> <td align="center"><strong>95.71</strong></td> <td align="center"><strong>74.29</strong></td> </tr> </table> </div>
-
----
-
-## Pretrained Models
-
-(Optional) Add pretrained weights here.
-
----
-
 ## Citation
+
+If you find D2TriPO-DETR useful in your research, please consider citing:
 
 ```bibtex
 @article{zhu2020deformable,
@@ -202,7 +218,7 @@ Before running, ensure that the robot, gripper, and camera are properly connecte
 
 ## License
 
-This project is released under the [Apache License 2.0](https://mok1170.github.io/TII/). See `LICENSE` for details.
+This project is released under the [D2TriPO-DETR](https://mok1170.github.io/TII/). See `LICENSE` for details.
 
 ---
 
