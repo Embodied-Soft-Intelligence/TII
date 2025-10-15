@@ -179,6 +179,8 @@ Before running, ensure that the robot, gripper, and camera are properly connecte
 
 <div align="center"> <table> <tr> <th>Models</th> <th>Cluttered Scenes (%)</th> <th>Stacked Scenes (%)</th> </tr> <tr> <td>Mutli-Task CNN[8]</td> <td align="center">90.60</td> <td align="center">65.65</td> </tr> <tr> <td>SMTNet[35]</td> <td align="center">86.13</td> <td align="center">65.00</td> </tr> <tr> <td>EGNet[5]</td> <td align="center">93.60</td> <td align="center">69.60</td> </tr> <tr> <td><strong>D2TriPO-DETR (Ours)</strong></td> <td align="center"><strong>95.71</strong></td> <td align="center"><strong>74.29</strong></td> </tr> </table> </div>
 
+---
+
 ## Pretrained Models
 
 (Optional) Add pretrained weights here.
