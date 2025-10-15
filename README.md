@@ -95,7 +95,6 @@ Vision-based grasping is essential for industrial and household robotics but rem
 > All D2TriPO-DETR experiments reported here used a total batch size of 4 (see code for implementation details).
 
 ---
----
 
 ## Requirements
 
