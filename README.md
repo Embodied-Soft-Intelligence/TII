@@ -1,3 +1,5 @@
+This repository is an official implementation of the paper [D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer](https://mok1170.github.io/TII/).
+
 # D2TriPO-DETR
 
 > **Dual-Decoder Triple-Parallel-Output Detection Transformer**
@@ -48,32 +50,51 @@ Vision-based grasping is essential for industrial and household robotics but rem
 
 ## Results
 
+<div>
+
+<table>
+<tr>
+<td valign="top">
+
 ### Grasp detection (VMRD)
 
-| Model           | Accuracy (%) |
-|-----------------|--------------:|
-| FCGN[25]        | 54.5          |
-| VMRN[3]         | 70.5          |
-| SE-ResUNet[26]  | 81.2          |
-| GR-ConvNet[27]  | 82.7          |
-| TFGrasp[28]     | 83.3          |
-| SKGNet[29]      | 86.1          |
-| SPANet[30]      | 86.7          |
-| EGNet[5]        | 87.1          |
-| **D2TriPO-DETR** (Ours) | **88.6** |
+<table>
+  <tr><th align="left">Model</th><th align="right">Accuracy (%)</th></tr>
+  <tr><td>FCGN[25]</td><td align="right">54.5</td></tr>
+  <tr><td>VMRN[3]</td><td align="right">70.5</td></tr>
+  <tr><td>SE-ResUNet[26]</td><td align="right">81.2</td></tr>
+  <tr><td>GR-ConvNet[27]</td><td align="right">82.7</td></tr>
+  <tr><td>TFGrasp[28]</td><td align="right">83.3</td></tr>
+  <tr><td>SKGNet[29]</td><td align="right">86.1</td></tr>
+  <tr><td>SPANet[30]</td><td align="right">86.7</td></tr>
+  <tr><td>EGNet[5]</td><td align="right">87.1</td></tr>
+  <tr><td><strong>D2TriPO-DETR (Ours)</strong></td><td align="right"><strong>88.6</strong></td></tr>
+</table>
+
+</td>
+
+<td valign="top" style="padding-left: 40px;">
 
 ### Grasp detection (Cornell)
 
-| Model        | Input | Accuracy (%) |
-|--------------|:-----:|-------------:|
-| TFGrasp[28]  | RGB   | 96.78         |
-| TFGrasp[28]  | RGBD  | 97.99         |
-| DSNet[33]    | RGBD  | 98.31         |
-| Yang[34]     | RGB   | 98.74         |
-| **D2TriPO-DETR** (Ours) | RGB | **98.87** |
+<table>
+  <tr><th align="left">Model</th><th align="center">Input</th><th align="right">Accuracy (%)</th></tr>
+  <tr><td>TFGrasp[28]</td><td align="center">RGB</td><td align="right">96.78</td></tr>
+  <tr><td>TFGrasp[28]</td><td align="center">RGBD</td><td align="right">97.99</td></tr>
+  <tr><td>DSNet[33]</td><td align="center">RGBD</td><td align="right">98.31</td></tr>
+  <tr><td>Yang[34]</td><td align="center">RGB</td><td align="right">98.74</td></tr>
+  <tr><td><strong>D2TriPO-DETR (Ours)</strong></td><td align="center">RGB</td><td align="right"><strong>98.87</strong></td></tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+</div>
 
 > All D2TriPO-DETR experiments reported here used a total batch size of 4 (see code for implementation details).
 
+---
 ---
 
 ## Requirements
@@ -234,7 +255,7 @@ If you use this work in your research, please cite:
 
 ## License
 
-This project is released under the **Apache License 2.0**. See `LICENSE` for details.
+This project is released under the [Apache License 2.0](https://mok1170.github.io/TII/). See `LICENSE` for details.
 
 ---
 
