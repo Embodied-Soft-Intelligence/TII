@@ -1,0 +1,46 @@
+2024-10-10 20:11:33,687 INFO    StreamThr :22703 [internal.py:wandb_internal():85] W&B internal server running at pid: 22703, started at: 2024-10-10 20:11:33.682856
+2024-10-10 20:11:33,710 DEBUG   HandlerThread:22703 [handler.py:handle_request():158] handle_request: status
+2024-10-10 20:11:33,716 INFO    WriterThread:22703 [datastore.py:open_for_write():87] open: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/results/wandb/run-20241010_201133-kmwv3n5l/run-kmwv3n5l.wandb
+2024-10-10 20:11:33,719 DEBUG   SenderThread:22703 [sender.py:send():391] send: header
+2024-10-10 20:11:33,720 DEBUG   SenderThread:22703 [sender.py:send():391] send: run
+2024-10-10 20:11:34,468 INFO    SenderThread:22703 [dir_watcher.py:__init__():211] watching files in: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/results/wandb/run-20241010_201133-kmwv3n5l/files
+2024-10-10 20:11:34,468 INFO    SenderThread:22703 [sender.py:_start_run_threads():1200] run started: kmwv3n5l with start time 1728562293.678941
+2024-10-10 20:11:34,488 DEBUG   HandlerThread:22703 [handler.py:handle_request():158] handle_request: run_start
+2024-10-10 20:11:34,523 DEBUG   HandlerThread:22703 [system_info.py:__init__():26] System info init
+2024-10-10 20:11:34,524 DEBUG   HandlerThread:22703 [system_info.py:__init__():41] System info init done
+2024-10-10 20:11:34,524 INFO    HandlerThread:22703 [system_monitor.py:start():194] Starting system monitor
+2024-10-10 20:11:34,526 INFO    HandlerThread:22703 [system_monitor.py:probe():214] Collecting system info
+2024-10-10 20:11:34,527 INFO    SystemMonitor:22703 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-10-10 20:11:34,531 INFO    SystemMonitor:22703 [interfaces.py:start():188] Started cpu monitoring
+2024-10-10 20:11:34,538 INFO    SystemMonitor:22703 [interfaces.py:start():188] Started disk monitoring
+2024-10-10 20:11:34,547 INFO    SystemMonitor:22703 [interfaces.py:start():188] Started gpu monitoring
+2024-10-10 20:11:34,557 INFO    SystemMonitor:22703 [interfaces.py:start():188] Started memory monitoring
+2024-10-10 20:11:34,568 INFO    SystemMonitor:22703 [interfaces.py:start():188] Started network monitoring
+2024-10-10 20:11:34,611 DEBUG   HandlerThread:22703 [system_info.py:probe():152] Probing system
+2024-10-10 20:11:34,618 DEBUG   HandlerThread:22703 [gitlib.py:_init_repo():56] git repository is invalid
+2024-10-10 20:11:34,619 DEBUG   HandlerThread:22703 [system_info.py:probe():200] Probing system done
+2024-10-10 20:11:34,619 DEBUG   HandlerThread:22703 [system_monitor.py:probe():223] {'os': 'Linux-5.4.0-150-generic-x86_64-with-glibc2.17', 'python': '3.8.19', 'heartbeatAt': '2024-10-10T12:11:34.611998', 'startedAt': '2024-10-10T12:11:33.665657', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py', 'codePathLocal': 'code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py', 'codePath': 'code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py', 'host': 'czp-Super-Server', 'username': 'pmh', 'executable': '/home/pmh/anaconda3/envs/detr/bin/python', 'cpu_count': 12, 'cpu_count_logical': 24, 'cpu_freq': {'current': 934.1527083333334, 'min': 800.0, 'max': 2001.0}, 'cpu_freq_per_core': [{'current': 800.168, 'min': 800.0, 'max': 2001.0}, {'current': 805.488, 'min': 800.0, 'max': 2001.0}, {'current': 868.368, 'min': 800.0, 'max': 2001.0}, {'current': 1045.895, 'min': 800.0, 'max': 2001.0}, {'current': 1115.761, 'min': 800.0, 'max': 2001.0}, {'current': 1227.268, 'min': 800.0, 'max': 2001.0}, {'current': 869.603, 'min': 800.0, 'max': 2001.0}, {'current': 998.536, 'min': 800.0, 'max': 2001.0}, {'current': 800.035, 'min': 800.0, 'max': 2001.0}, {'current': 800.0, 'min': 800.0, 'max': 2001.0}, {'current': 945.663, 'min': 800.0, 'max': 2001.0}, {'current': 911.052, 'min': 800.0, 'max': 2001.0}, {'current': 800.23, 'min': 800.0, 'max': 2001.0}, {'current': 838.299, 'min': 800.0, 'max': 2001.0}, {'current': 821.497, 'min': 800.0, 'max': 2001.0}, {'current': 1030.435, 'min': 800.0, 'max': 2001.0}, {'current': 1271.147, 'min': 800.0, 'max': 2001.0}, {'current': 1164.941, 'min': 800.0, 'max': 2001.0}, {'current': 912.655, 'min': 800.0, 'max': 2001.0}, {'current': 1001.262, 'min': 800.0, 'max': 2001.0}, {'current': 796.342, 'min': 800.0, 'max': 2001.0}, {'current': 800.328, 'min': 800.0, 'max': 2001.0}, {'current': 938.944, 'min': 800.0, 'max': 2001.0}, {'current': 867.121, 'min': 800.0, 'max': 2001.0}], 'disk': {'/': {'total': 93.31179428100586, 'used': 18.21540069580078}}, 'gpu': 'NVIDIA RTX A6000', 'gpu_count': 2, 'gpu_devices': [{'name': 'NVIDIA RTX A6000', 'memory_total': 51527024640}, {'name': 'NVIDIA RTX A6000', 'memory_total': 51527024640}], 'memory': {'total': 125.51963806152344}}
+2024-10-10 20:11:34,619 INFO    HandlerThread:22703 [system_monitor.py:probe():224] Finished collecting system info
+2024-10-10 20:11:34,619 INFO    HandlerThread:22703 [system_monitor.py:probe():227] Publishing system info
+2024-10-10 20:11:34,619 DEBUG   HandlerThread:22703 [system_info.py:_save_conda():209] Saving list of conda packages installed into the current environment
+2024-10-10 20:11:35,480 INFO    Thread-17 :22703 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/results/wandb/run-20241010_201133-kmwv3n5l/files/conda-environment.yaml
+2024-10-10 20:11:37,651 DEBUG   HandlerThread:22703 [system_info.py:_save_conda():224] Saving conda packages done
+2024-10-10 20:11:37,658 INFO    HandlerThread:22703 [system_monitor.py:probe():229] Finished publishing system info
+2024-10-10 20:11:37,667 DEBUG   SenderThread:22703 [sender.py:send():391] send: files
+2024-10-10 20:11:37,668 INFO    SenderThread:22703 [sender.py:_save_file():1466] saving file wandb-metadata.json with policy now
+2024-10-10 20:11:37,855 DEBUG   HandlerThread:22703 [handler.py:handle_request():158] handle_request: python_packages
+2024-10-10 20:11:37,857 DEBUG   SenderThread:22703 [sender.py:send_request():418] send_request: python_packages
+2024-10-10 20:11:37,866 DEBUG   HandlerThread:22703 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-10 20:11:37,867 DEBUG   SenderThread:22703 [sender.py:send_request():418] send_request: stop_status
+2024-10-10 20:11:37,876 DEBUG   HandlerThread:22703 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-10 20:11:38,292 DEBUG   SenderThread:22703 [sender.py:send():391] send: telemetry
+2024-10-10 20:11:38,472 INFO    Thread-17 :22703 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/results/wandb/run-20241010_201133-kmwv3n5l/files/conda-environment.yaml
+2024-10-10 20:11:38,474 INFO    Thread-17 :22703 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/results/wandb/run-20241010_201133-kmwv3n5l/files/requirements.txt
+2024-10-10 20:11:38,475 INFO    Thread-17 :22703 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/results/wandb/run-20241010_201133-kmwv3n5l/files/wandb-metadata.json
+2024-10-10 20:11:38,476 INFO    Thread-17 :22703 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/results/wandb/run-20241010_201133-kmwv3n5l/files/output.log
+2024-10-10 20:11:38,889 INFO    wandb-upload_0:22703 [upload_job.py:push():130] Uploaded file /tmp/tmpp94db0s9wandb/b0cjtg4s-wandb-metadata.json
+2024-10-10 20:11:39,304 DEBUG   HandlerThread:22703 [handler.py:handle_request():158] handle_request: status_report
+2024-10-10 20:11:40,474 INFO    Thread-17 :22703 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/results/wandb/run-20241010_201133-kmwv3n5l/files/output.log
+2024-10-10 20:11:43,482 INFO    Thread-17 :22703 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/results/wandb/run-20241010_201133-kmwv3n5l/files/output.log
+2024-10-10 20:11:44,483 INFO    Thread-17 :22703 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/results/wandb/run-20241010_201133-kmwv3n5l/files/output.log
+2024-10-10 20:11:44,807 DEBUG   HandlerThread:22703 [handler.py:handle_request():158] handle_request: status_report

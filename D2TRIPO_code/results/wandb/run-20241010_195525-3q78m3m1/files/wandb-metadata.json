@@ -1,0 +1,166 @@
+{
+    "os": "Linux-5.4.0-150-generic-x86_64-with-glibc2.17",
+    "python": "3.8.19",
+    "heartbeatAt": "2024-10-10T11:55:26.658418",
+    "startedAt": "2024-10-10T11:55:25.740574",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py",
+    "codePathLocal": "code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py",
+    "codePath": "code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py",
+    "host": "czp-Super-Server",
+    "username": "pmh",
+    "executable": "/home/pmh/anaconda3/envs/detr/bin/python",
+    "cpu_count": 12,
+    "cpu_count_logical": 24,
+    "cpu_freq": {
+        "current": 923.9065416666667,
+        "min": 800.0,
+        "max": 2001.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 1041.172,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 1298.698,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 894.479,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 1020.049,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 1000.457,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 1095.863,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 800.414,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 951.351,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 866.681,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 810.398,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 954.358,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 834.457,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 1117.468,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 1301.85,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 898.586,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 1187.26,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 975.752,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 1100.415,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 801.058,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 1028.416,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 858.842,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 804.008,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 1101.218,
+            "min": 800.0,
+            "max": 2001.0
+        },
+        {
+            "current": 863.226,
+            "min": 800.0,
+            "max": 2001.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 93.31179428100586,
+            "used": 18.215267181396484
+        }
+    },
+    "gpu": "NVIDIA RTX A6000",
+    "gpu_count": 2,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA RTX A6000",
+            "memory_total": 51527024640
+        },
+        {
+            "name": "NVIDIA RTX A6000",
+            "memory_total": 51527024640
+        }
+    ],
+    "memory": {
+        "total": 125.51963806152344
+    }
+}

@@ -1,0 +1,8 @@
+/home/pmh/anaconda3/envs/detr/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/pmh/anaconda3/envs/detr/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet101_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet101_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Not using distributed mode
+[10/10 19:25:40.667]: git:
+  sha: N/A, status: clean, branch: N/A
+[10/10 19:25:40.669]: Command: /home/pmh/code/dab_deformable_resnet_5d_Rotate_Point_QK/main.py
