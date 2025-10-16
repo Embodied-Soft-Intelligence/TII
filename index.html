@@ -68,6 +68,11 @@
     .success-table td:not(:first-child) {
       width: 18.75%; /* Wider data columns */
     }
+    /* Remove borders and outlines from images and videos */
+    img, video {
+      outline: none;
+      border: none;
+    }
     /* Fallback styling for missing images */
     .image-fallback {
       background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
@@ -76,7 +81,11 @@
       justify-content: center;
       color: #6366f1;
       font-weight: 600;
-      border: 2px dashed #c7d2fe;
+    }
+    /* Subtle border for image containers */
+    .image-container {
+      border-radius: 0.5rem;
+      overflow: hidden;
     }
   </style>
 </head>
@@ -117,11 +126,11 @@
 
     <!-- Fig 1 -->
     <section id="fig1" class="mt-8 text-center">
-      <div class="inline-block bg-white rounded-lg p-4 shadow-soft uniform-width">
+      <div class="inline-block bg-white rounded-lg p-4 shadow-soft uniform-width image-container">
         <!-- Using raw.githubusercontent.com for direct image access -->
         <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/1.png" 
              alt="Fig.1: D2TriPO-DETR Architecture Schematic" 
-             class="w-full figure-img rounded image-fallback"
+             class="w-full figure-img rounded"
              onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.1: Image not available';">
         <p class="mt-2 text-sm text-gray-600">Fig.1: D2TriPO-DETR Architecture Schematic</p>
       </div>
@@ -129,10 +138,10 @@
 
     <!-- Fig 7 & description -->
     <section class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 items-start uniform-width">
-      <div class="bg-white rounded-lg p-4 shadow-soft text-center">
+      <div class="bg-white rounded-lg p-4 shadow-soft text-center image-container">
         <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/7.png" 
              alt="Fig.7: Experiment Setup" 
-             class="w-full rounded figure-img image-fallback"
+             class="w-full rounded figure-img"
              onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.7: Image not available';">
         <p class="mt-2 text-sm text-gray-600">Fig.7: Experiment Setup</p>
       </div>
@@ -144,10 +153,10 @@
 
     <!-- Fig 8 centered with description -->
     <section class="mt-10 text-center uniform-width">
-      <div class="bg-white rounded-lg p-6 shadow-soft">
+      <div class="bg-white rounded-lg p-6 shadow-soft image-container">
         <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/8.png" 
              alt="Fig.8: Experimental Procedure" 
-             class="w-full figure-img rounded image-fallback"
+             class="w-full figure-img rounded"
              onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.8: Image not available';">
         <p class="mt-2 text-sm text-gray-600">Fig.8: Experimental Procedure</p>
         <p class="mt-4 text-gray-700 leading-relaxed text-justify">To evaluate applicability to real-world grasping, we test configurations with 2–5 objects. For each object count we run five trials in both cluttered and stacked settings, yielding 40 experiments in total.</p>
@@ -235,10 +244,10 @@
 
     <!-- Fig 9 + Fig 10 sections -->
     <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-start uniform-width">
-      <div class="bg-white p-6 rounded-lg shadow-soft">
+      <div class="bg-white p-6 rounded-lg shadow-soft image-container">
         <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/9.png" 
              alt="Fig.9: Stability Evaluation" 
-             class="w-full rounded figure-img image-fallback"
+             class="w-full rounded figure-img"
              onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.9: Image not available';">
         <p class="mt-2 text-sm text-gray-600">Fig.9: Stability Evaluation</p>
       </div>
@@ -247,10 +256,10 @@
         <p class="mt-3 text-gray-700 leading-relaxed text-justify">We selected representative scenarios with 2–5 objects and repeated each 30 times. The system shows only a modest drop in success rate as object count increases, maintaining high and stable performance across scales.</p>
       </div>
 
-      <div class="order-last md:order-none bg-white p-6 rounded-lg shadow-soft">
+      <div class="order-last md:order-none bg-white p-6 rounded-lg shadow-soft image-container">
         <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/10.png" 
              alt="Fig.10: Robustness under Boundary Ambiguity" 
-             class="w-full rounded figure-img image-fallback"
+             class="w-full rounded figure-img"
              onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.10: Image not available';">
         <p class="mt-2 text-sm text-gray-600">Fig.10: Robustness under Boundary Ambiguity</p>
       </div>
@@ -262,10 +271,10 @@
 
     <!-- Video -->
     <section id="video" class="mt-12 text-center uniform-width">
-      <div class="bg-white p-6 rounded-lg shadow-soft">
+      <div class="bg-white p-6 rounded-lg shadow-soft image-container">
         <p class="text-sm text-gray-600 mb-3 text-justify">Demonstration video — real robot experiments</p>
         <!-- Using raw.githubusercontent.com for direct video access -->
-        <video controls class="w-full rounded image-fallback" style="min-height: 300px;">
+        <video controls class="w-full rounded" style="min-height: 300px;">
           <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/D2TriPO-DETR%20Dual-Decoder%20Triple-Parallel-Output%20Detection%20Transformer.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
