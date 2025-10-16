@@ -68,6 +68,16 @@
     .success-table td:not(:first-child) {
       width: 18.75%; /* Wider data columns */
     }
+    /* Fallback styling for missing images */
+    .image-fallback {
+      background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6366f1;
+      font-weight: 600;
+      border: 2px dashed #c7d2fe;
+    }
   </style>
 </head>
 <body class="antialiased text-slate-900">
@@ -108,25 +118,38 @@
     <!-- Fig 1 -->
     <section id="fig1" class="mt-8 text-center">
       <div class="inline-block bg-white rounded-lg p-4 shadow-soft uniform-width">
-        <img src="https://github.com/Embodied-Soft-Intelligence/TII/blob/main/picture/1.png" alt="Fig.1" class="w-full figure-img rounded" />
+        <!-- Using raw.githubusercontent.com for direct image access -->
+        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/1.png" 
+             alt="Fig.1: D2TriPO-DETR Architecture Schematic" 
+             class="w-full figure-img rounded image-fallback"
+             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.1: Image not available';">
+        <p class="mt-2 text-sm text-gray-600">Fig.1: D2TriPO-DETR Architecture Schematic</p>
       </div>
     </section>
 
     <!-- Fig 7 & description -->
     <section class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 items-start uniform-width">
       <div class="bg-white rounded-lg p-4 shadow-soft text-center">
-        <img src="https://github.com/Embodied-Soft-Intelligence/TII/blob/main/picture/7.png" alt="Fig.7" class="w-full rounded figure-img" />
+        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/7.png" 
+             alt="Fig.7: Experiment Setup" 
+             class="w-full rounded figure-img image-fallback"
+             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.7: Image not available';">
+        <p class="mt-2 text-sm text-gray-600">Fig.7: Experiment Setup</p>
       </div>
       <div class="glass p-6 rounded-lg shadow-soft">
         <h3 class="font-semibold text-lg text-justify">Experiment setup</h3>
-        <p class="mt-3 text-gray-700 leading-relaxed text-justify">描述文字（在此处填写关于 Fig. 7 的说明）。</p>
+        <p class="mt-3 text-gray-700 leading-relaxed text-justify">Our experimental setup consists of a robotic arm with a parallel-jaw gripper and an overhead camera. We use a variety of household objects with different shapes, sizes, and textures to evaluate the system's performance in both cluttered and stacked scenarios.</p>
       </div>
     </section>
 
     <!-- Fig 8 centered with description -->
     <section class="mt-10 text-center uniform-width">
       <div class="bg-white rounded-lg p-6 shadow-soft">
-        <img src="https://github.com/Embodied-Soft-Intelligence/TII/blob/main/picture/8.png" alt="Fig.8" class="w-full figure-img rounded" />
+        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/8.png" 
+             alt="Fig.8: Experimental Procedure" 
+             class="w-full figure-img rounded image-fallback"
+             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.8: Image not available';">
+        <p class="mt-2 text-sm text-gray-600">Fig.8: Experimental Procedure</p>
         <p class="mt-4 text-gray-700 leading-relaxed text-justify">To evaluate applicability to real-world grasping, we test configurations with 2–5 objects. For each object count we run five trials in both cluttered and stacked settings, yielding 40 experiments in total.</p>
       </div>
     </section>
@@ -213,7 +236,11 @@
     <!-- Fig 9 + Fig 10 sections -->
     <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-start uniform-width">
       <div class="bg-white p-6 rounded-lg shadow-soft">
-        <img src="https://github.com/Embodied-Soft-Intelligence/TII/blob/main/picture/9.png" alt="Fig.9" class="w-full rounded figure-img" />
+        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/9.png" 
+             alt="Fig.9: Stability Evaluation" 
+             class="w-full rounded figure-img image-fallback"
+             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.9: Image not available';">
+        <p class="mt-2 text-sm text-gray-600">Fig.9: Stability Evaluation</p>
       </div>
       <div class="glass p-6 rounded-lg shadow-soft">
         <h4 class="font-semibold text-justify">Stability evaluation</h4>
@@ -221,7 +248,11 @@
       </div>
 
       <div class="order-last md:order-none bg-white p-6 rounded-lg shadow-soft">
-        <img src="https://github.com/Embodied-Soft-Intelligence/TII/blob/main/picture/10.png" alt="Fig.10" class="w-full rounded figure-img" />
+        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/10.png" 
+             alt="Fig.10: Robustness under Boundary Ambiguity" 
+             class="w-full rounded figure-img image-fallback"
+             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.10: Image not available';">
+        <p class="mt-2 text-sm text-gray-600">Fig.10: Robustness under Boundary Ambiguity</p>
       </div>
       <div class="glass p-6 rounded-lg shadow-soft">
         <h4 class="font-semibold text-justify">Robustness under boundary ambiguity</h4>
@@ -233,7 +264,12 @@
     <section id="video" class="mt-12 text-center uniform-width">
       <div class="bg-white p-6 rounded-lg shadow-soft">
         <p class="text-sm text-gray-600 mb-3 text-justify">Demonstration video — real robot experiments</p>
-        <video controls class="w-full rounded" src="https://github.com/Embodied-Soft-Intelligence/TII/blob/main/picture/D2TriPO-DETR%20Dual-Decoder%20Triple-Parallel-Output%20Detection%20Transformer.mp4">Your browser does not support the video tag.</video>
+        <!-- Using raw.githubusercontent.com for direct video access -->
+        <video controls class="w-full rounded image-fallback" style="min-height: 300px;">
+          <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/D2TriPO-DETR%20Dual-Decoder%20Triple-Parallel-Output%20Detection%20Transformer.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <p class="mt-2 text-xs text-gray-500">Note: If the video doesn't load, it may be due to GitHub's raw file size limitations.</p>
       </div>
     </section>
 
