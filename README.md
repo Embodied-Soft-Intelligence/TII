@@ -2,7 +2,7 @@
 
 > **Dual-Decoder Triple-Parallel-Output Detection Transformer**
 
-This repository is an official implementation of the paper [D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer](https://mok1170.github.io/TII/).
+This repository is an official implementation of the paper [D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer](https://anonymous.4open.science/w/TII-D2TriPO-DETR/).
 
 <p align="center">
   <img src="https://github.com/Embodied-Soft-Intelligence/TII/blob/main/picture/3.png" alt="Fig. 3" />
@@ -33,15 +33,9 @@ This repository is an official implementation of the paper [D2TriPO-DETR: Dual-D
 
 ---
 
-## Introduction
-
-D2TriPO-DETR is an end-to-end vision-based grasp detection framework designed for object-stacking scenarios. It adopts a dual-decoder transformer architecture with **triple-parallel outputs**: object detection, manipulation relationship reasoning, and grasp detection. Two modules — Distributed Attention Perception (DAP) and Visual Attention Adaptation (VAA) — are integrated to improve inter-object relational reasoning and viewpoint adaptation.
-
----
-
 ## Abstract
 
-Vision-based grasping is essential for industrial and household robotics but remains challenging in stacked-object scenarios. We introduce D2TriPO-DETR, a dual-decoder transformer producing three parallel outputs for object detection, manipulation relationship reasoning, and grasp detection. Producing the three outputs concurrently reduces error propagation between subtasks. On the Visual Manipulation Relationship Dataset (VMRD), D2TriPO-DETR outperforms prior methods on several key metrics and demonstrates strong real-world performance on a UR3 robot equipped with a parallel gripper.
+Vision-based grasping, though widely employed for industrial and household applications, still struggles with object stacking scenarios. Current methods face three major challenges: 1) limited inter-object relationship understanding, 2) poor grasping adaptation across different viewpoints, and 3) error propagation. Inspired by distributed perception and visual adaptation from the human visual attention system, we propose D2TriPO-DETR, a dual-decoder transformer with three outputs of which are object detection, manipulation relationship, and grasp detection， to address the above challenges. Specifically, a distributed attention perception module and a visual attention adaptation module are designed to address limited inter-object relationship understanding and poor grasping adaptation across different viewpoints. These two modules are respectively integrated into the two parallel decoders to output the triple results simultaneously, partly eliminating error propagation. The evaluation of the Visual Manipulation Relationship Dataset shows that D2TriPO-DETR outperforms existing state-of-the-art methods across all metrics, e.g., a 5.3% higher precision in object detection, a 6.7% image accuracy improvement in manipulation relationship, and a 1.5% higher accuracy in grasp detection. Real-world testing confirms D2TriPO-DETR's effectiveness in grasping stacked objects.
 
 ---
 
@@ -143,7 +137,7 @@ python test.py
 ## Usage
 ### Dataset Preparation
 
-Please download VMRD dataset and organize them as following:
+Please download [VMRD](https://gr.xjtu.edu.cn/zh/web/zeuslan/dataset) dataset and [Cornell](https://journals.sagepub.com/doi/abs/10.1177/0278364914549607) dataset, then organize them as following:
 
 ```
 code_root/
@@ -175,7 +169,7 @@ code_root/
 
 ### Training
 
-To train the baseline D2TriPO-DETR on a single node with 4 GPUs for 120 epochs, first modify the dataset path in `./datasets/vmrd.py`, then download the resnet101_doubledetr weight file and place it in the project root directory, and finally run the following command:
+To train the baseline D2TriPO-DETR on a single node with 4 GPUs for 120 epochs, first modify the dataset path in `./datasets/vmrd.py`, then download the [resnet101_doubledetr] weight file and place it in the project root directory, and finally run the following command:
 
 ```bash
 CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node=4 --use_env main.py
@@ -185,42 +179,22 @@ We train D2TriPO-DETR with the AdamW optimizer, using a learning rate of 1e-4 fo
 
 ---
 
-### Evaluation
-
-You can obtain the configuration file and pretrained model of D2TriPO-DETR, then modify the folder path of the weight files to be batch-evaluated and the batch size in the evaluation script, and run :
-```bash
-python evaluate.py
-```
-
----
-
 ## Real-World Experiments
 
 This repository includes the code used for **real-world robotic grasping experiments**.  
-The code path for the real-world experiment is `./robot/predict.py`. To perform experiments using an actual robotic arm, run:
+The code path for the real-world experiment is `./robot/inference.py`. To perform experiments using an actual robotic arm, run:
 
 ```bash
-python predict.py
+python inference.py
 ```
 
 The script `predict.py` connects to a **UR robotic arm** equipped with an **Intel RealSense D435** depth camera and a **Robotiq 2F-85** parallel gripper.  It performs **real-time grasp detection and execution** using the trained D2TriPO-DETR model.  Before running, ensure that the robot, gripper, and camera are properly connected and configured.
 
 ---
 
-## Citation
+## Change Log
 
-If you find D2TriPO-DETR useful in your research, please consider citing:
-
-```bibtex
-@article{zhu2020deformable,
-  title={D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer},
-  author={Zhu, Xizhou and Su, Weijie and Lu, Lewei and Li, Bin and Wang, Xiaogang and Dai, Jifeng},
-  journal={arXiv preprint arXiv:2010.04159},
-  year={2020}
-}
-```
-
----
+See `changelog.md` for detailed logs of major changes.
 
 ## License
 
