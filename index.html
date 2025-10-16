@@ -12,7 +12,7 @@
     :root{--accent:#6366f1;--muted:#6b7280}
     html,body{height:100%}
     body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,'Helvetica Neue',Arial; background:linear-gradient(180deg,#fbfdff 0%, #f3f6ff 100%); color:#0f172a}
-    .container{max-width:1100px}
+    .container{max-width:1200px} /* Increased from 1100px to 1200px */
     .shadow-soft{box-shadow:0 8px 30px rgba(15,23,42,0.06)}
     .glass{background:rgba(255,255,255,0.75);backdrop-filter:blur(6px)}
     .figure-img{max-height:520px;object-fit:contain}
@@ -24,14 +24,14 @@
     /* Consistent content width */
     .content-width {
       width: 100%;
-      max-width: 900px; /* Slightly less than container for better readability */
+      max-width: 1000px; /* Increased from 900px to 1000px */
       margin-left: auto;
       margin-right: auto;
     }
     /* Ensure all content fits within the same width */
     .uniform-width {
       width: 100%;
-      max-width: 900px;
+      max-width: 1000px; /* Increased from 900px to 1000px */
       margin-left: auto;
       margin-right: auto;
     }
@@ -152,14 +152,14 @@
       <!-- First row of tables -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Object Detection Comparison on VMRD</h4>
+          <h4 class="font-semibold mb-4 text-center">Object Detection<br>Comparison on VMRD</h4>
           <div class="rounded overflow-hidden border table-container">
             <table class="w-full">
               <thead>
                 <tr>
                   <th class="px-2 py-2 text-center">Models</th>
-                  <th class="px-2 py-2 text-center">Object Detection Recall (%)</th>
-                  <th class="px-2 py-2 text-center">Object Detection Precision (%)</th>
+                  <th class="px-2 py-2 text-center">Detection<br>Recall (%)</th>
+                  <th class="px-2 py-2 text-center">Detection<br>Precision (%)</th>
                 </tr>
               </thead>
               <tbody>
@@ -184,7 +184,7 @@
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Manipulation Relationship Comparison on VMRD</h4>
+          <h4 class="font-semibold mb-4 text-center">Manipulation Relationship<br>Comparison on VMRD</h4>
           <div class="rounded overflow-hidden border table-container">
             <table class="w-full">
               <thead>
@@ -259,7 +259,7 @@
       <!-- Second row of tables -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Manipulation Relationship IA-X Comparison on VMRD</h4>
+          <h4 class="font-semibold mb-4 text-center">Manipulation Relationship<br>IA-X Comparison on VMRD</h4>
           <div class="rounded overflow-hidden border table-container">
             <table class="w-full">
               <thead>
@@ -327,7 +327,7 @@
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Grasp Detection Comparison on VMRD</h4>
+          <h4 class="font-semibold mb-4 text-center">Grasp Detection<br>Comparison on VMRD</h4>
           <div class="rounded overflow-hidden border table-container">
             <table class="w-full">
               <thead>
@@ -382,7 +382,7 @@
       <!-- Third row of tables -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Grasp Detection Results on Cornell Dataset</h4>
+          <h4 class="font-semibold mb-4 text-center">Grasp Detection Results<br>on Cornell Dataset</h4>
           <div class="rounded overflow-hidden border table-container">
             <table class="w-full">
               <thead>
@@ -429,6 +429,12 @@
     <section class="mt-12 uniform-width">
       <h3 class="font-semibold text-xl text-center mb-6">Experiment setup</h3>
       
+      <!-- Experiment setup description -->
+      <div class="glass p-6 rounded-lg shadow-soft mb-6">
+        <h4 class="font-semibold text-lg text-justify mb-4">Experimental Configuration</h4>
+        <p class="text-gray-700 leading-relaxed text-justify">Our experimental setup consists of a robotic arm with a parallel-jaw gripper and an overhead camera. We use a variety of household objects with different shapes, sizes, and textures to evaluate the system's performance in both cluttered and stacked scenarios. The system is tested under various lighting conditions and occlusion levels to assess its robustness in real-world environments.</p>
+      </div>
+      
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         <div class="bg-white rounded-lg p-4 shadow-soft text-center image-container">
           <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/7.png" 
@@ -439,14 +445,14 @@
         </div>
         
         <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Evaluation under Low-Light and Occlusion Conditions</h4>
+          <h4 class="font-semibold mb-4 text-center">Evaluation under<br>Low-Light & Occlusion</h4>
           <div class="rounded overflow-hidden border table-container">
             <table class="w-full">
               <thead>
                 <tr>
                   <th class="px-2 py-2 text-center">Dataset</th>
-                  <th class="px-2 py-2 text-center">Object Detection Recall (%)</th>
-                  <th class="px-2 py-2 text-center">Object Detection Precision (%)</th>
+                  <th class="px-2 py-2 text-center">Detection<br>Recall (%)</th>
+                  <th class="px-2 py-2 text-center">Detection<br>Precision (%)</th>
                   <th class="px-2 py-2 text-center">IA (%)</th>
                   <th class="px-2 py-2 text-center">Accuracy (%)</th>
                 </tr>
