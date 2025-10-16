@@ -111,11 +111,9 @@
 
   <header class="container mx-auto px-5 py-10 text-center">
     <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer</h1>
-    <p class="mt-3 text-sm text-gray-600 text-justify content-width">Author(s): <span class="italic text-slate-700">(place author names here)</span></p>
     
     <!-- Buttons section -->
-    <div class="mt-6 flex justify-center gap-4">
-      <a href="#" class="px-6 py-3 bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-600 transition-colors">Paper</a>
+    <div class="mt-6 flex justify-center">
       <a href="https://github.com/Embodied-Soft-Intelligence/TII" class="px-6 py-3 bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-600 transition-colors">Code</a>
     </div>
     
@@ -136,19 +134,384 @@
       </div>
     </section>
 
-    <!-- Fig 7 & description -->
-    <section class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 items-start uniform-width">
-      <div class="bg-white rounded-lg p-4 shadow-soft text-center image-container">
-        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/7.png" 
-             alt="Fig.7: Experiment Setup" 
-             class="w-full rounded figure-img"
-             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.7: Image not available';">
-        <p class="mt-2 text-sm text-gray-600">Fig.7: Experiment Setup</p>
+    <!-- Fig 3 -->
+    <section class="mt-8 text-center">
+      <div class="inline-block bg-white rounded-lg p-4 shadow-soft uniform-width image-container">
+        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/3.png" 
+             alt="Fig.3: Architecture of D2TriPO-DETR" 
+             class="w-full figure-img rounded"
+             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.3: Image not available';">
+        <p class="mt-2 text-sm text-gray-600">Fig.3: Architecture of D2TriPO-DETR. (a) Sections of backbone and encoder. (b) Architecture of the object detection and manipulation relationship decoder. (c) Architecture of the grasp detection decoder. The architectures of (d) CPC, (e) AEG, and (f) AMDCA.</p>
       </div>
-      <div class="glass p-6 rounded-lg shadow-soft">
-        <h3 class="font-semibold text-lg text-justify">Experiment setup</h3>
-        <p class="mt-3 text-gray-700 leading-relaxed text-justify">Our experimental setup consists of a robotic arm with a parallel-jaw gripper and an overhead camera. We use a variety of household objects with different shapes, sizes, and textures to evaluate the system's performance in both cluttered and stacked scenarios.</p>
+    </section>
+
+    <!-- New Tables Section -->
+    <section class="mt-12 uniform-width">
+      <h3 class="font-semibold text-xl text-center mb-6">Quantitative Evaluation Results</h3>
+      
+      <!-- First row of tables -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white p-6 rounded-lg shadow-soft">
+          <h4 class="font-semibold mb-4 text-center">Object Detection Comparison on VMRD</h4>
+          <div class="rounded overflow-hidden border table-container">
+            <table class="w-full">
+              <thead>
+                <tr>
+                  <th class="px-2 py-2 text-center">Models</th>
+                  <th class="px-2 py-2 text-center">Object Detection Recall (%)</th>
+                  <th class="px-2 py-2 text-center">Object Detection Precision (%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">VSE[23]</td>
+                  <td class="px-2 py-2 text-center">89.2</td>
+                  <td class="px-2 py-2 text-center">90.2</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">GrRN[19]</td>
+                  <td class="px-2 py-2 text-center">91.9</td>
+                  <td class="px-2 py-2 text-center">94.8</td>
+                </tr>
+                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
+                  <td class="px-2 py-2 text-center">D2TriPO-DETR (Ours)</td>
+                  <td class="px-2 py-2 text-center">98.0</td>
+                  <td class="px-2 py-2 text-center">97.2</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-soft">
+          <h4 class="font-semibold mb-4 text-center">Manipulation Relationship Comparison on VMRD</h4>
+          <div class="rounded overflow-hidden border table-container">
+            <table class="w-full">
+              <thead>
+                <tr>
+                  <th class="px-2 py-2 text-center">Models</th>
+                  <th class="px-2 py-2 text-center">OR (%)</th>
+                  <th class="px-2 py-2 text-center">OP (%)</th>
+                  <th class="px-2 py-2 text-center">IA (%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Mutli-Task CNN[8]</td>
+                  <td class="px-2 py-2 text-center">86.0</td>
+                  <td class="px-2 py-2 text-center">88.8</td>
+                  <td class="px-2 py-2 text-center">67.1</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">VMRN-RN101[4]</td>
+                  <td class="px-2 py-2 text-center">85.4</td>
+                  <td class="px-2 py-2 text-center">85.5</td>
+                  <td class="px-2 py-2 text-center">65.8</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">VMRN-VGG101[4]</td>
+                  <td class="px-2 py-2 text-center">86.3</td>
+                  <td class="px-2 py-2 text-center">88.8</td>
+                  <td class="px-2 py-2 text-center">68.4</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">GVMRN-RF-RN101[24]</td>
+                  <td class="px-2 py-2 text-center">86.9</td>
+                  <td class="px-2 py-2 text-center">87.5</td>
+                  <td class="px-2 py-2 text-center">68.8</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">GVMRN-RF-VGG101[24]</td>
+                  <td class="px-2 py-2 text-center">88.7</td>
+                  <td class="px-2 py-2 text-center">89.5</td>
+                  <td class="px-2 py-2 text-center">70.2</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Adj-Net-RN50[7]</td>
+                  <td class="px-2 py-2 text-center">88.9</td>
+                  <td class="px-2 py-2 text-center">91.5</td>
+                  <td class="px-2 py-2 text-center">75.0</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Adj-Net-RN101[7]</td>
+                  <td class="px-2 py-2 text-center">89.8</td>
+                  <td class="px-2 py-2 text-center">91.5</td>
+                  <td class="px-2 py-2 text-center">77.3</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">GrRN[19]</td>
+                  <td class="px-2 py-2 text-center">91.2</td>
+                  <td class="px-2 py-2 text-center">93.1</td>
+                  <td class="px-2 py-2 text-center">78.0</td>
+                </tr>
+                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
+                  <td class="px-2 py-2 text-center">D2TriPO-DETR (Ours)</td>
+                  <td class="px-2 py-2 text-center">92.3</td>
+                  <td class="px-2 py-2 text-center">94.3</td>
+                  <td class="px-2 py-2 text-center">84.7</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
+
+      <!-- Second row of tables -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white p-6 rounded-lg shadow-soft">
+          <h4 class="font-semibold mb-4 text-center">Manipulation Relationship IA-X Comparison on VMRD</h4>
+          <div class="rounded overflow-hidden border table-container">
+            <table class="w-full">
+              <thead>
+                <tr>
+                  <th class="px-2 py-2 text-center">Models</th>
+                  <th class="px-2 py-2 text-center">IA-2 (%)</th>
+                  <th class="px-2 py-2 text-center">IA-3 (%)</th>
+                  <th class="px-2 py-2 text-center">IA-4 (%)</th>
+                  <th class="px-2 py-2 text-center">IA-5 (%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Mutli-Task CNN[8]</td>
+                  <td class="px-2 py-2 text-center">87.7</td>
+                  <td class="px-2 py-2 text-center">64.1</td>
+                  <td class="px-2 py-2 text-center">56.6</td>
+                  <td class="px-2 py-2 text-center">72.9</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">GVMRN-RF-RN101[24]</td>
+                  <td class="px-2 py-2 text-center">91.4</td>
+                  <td class="px-2 py-2 text-center">69.2</td>
+                  <td class="px-2 py-2 text-center">61.2</td>
+                  <td class="px-2 py-2 text-center">57.5</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">GVMRN-RF-VGG101[24]</td>
+                  <td class="px-2 py-2 text-center">92.9</td>
+                  <td class="px-2 py-2 text-center">70.3</td>
+                  <td class="px-2 py-2 text-center">63.8</td>
+                  <td class="px-2 py-2 text-center">60.3</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Adj-Net-RN50[7]</td>
+                  <td class="px-2 py-2 text-center">87.3</td>
+                  <td class="px-2 py-2 text-center">74.5</td>
+                  <td class="px-2 py-2 text-center">69.8</td>
+                  <td class="px-2 py-2 text-center">72.6</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Adj-Net-RN101[7]</td>
+                  <td class="px-2 py-2 text-center">88.7</td>
+                  <td class="px-2 py-2 text-center">75.2</td>
+                  <td class="px-2 py-2 text-center">75.0</td>
+                  <td class="px-2 py-2 text-center">76.7</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">GrRN[19]</td>
+                  <td class="px-2 py-2 text-center">92.3</td>
+                  <td class="px-2 py-2 text-center">76.6</td>
+                  <td class="px-2 py-2 text-center">74.5</td>
+                  <td class="px-2 py-2 text-center">74.3</td>
+                </tr>
+                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
+                  <td class="px-2 py-2 text-center">D2TriPO-DETR (Ours)</td>
+                  <td class="px-2 py-2 text-center">93.8</td>
+                  <td class="px-2 py-2 text-center">82.8</td>
+                  <td class="px-2 py-2 text-center">81.1</td>
+                  <td class="px-2 py-2 text-center">87.1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-soft">
+          <h4 class="font-semibold mb-4 text-center">Grasp Detection Comparison on VMRD</h4>
+          <div class="rounded overflow-hidden border table-container">
+            <table class="w-full">
+              <thead>
+                <tr>
+                  <th class="px-2 py-2 text-center">Models</th>
+                  <th class="px-2 py-2 text-center">Accuracy (%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">FCGN[25]</td>
+                  <td class="px-2 py-2 text-center">54.5</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">VMRN[3]</td>
+                  <td class="px-2 py-2 text-center">70.5</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">SE-ResUNet[26]</td>
+                  <td class="px-2 py-2 text-center">81.2</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">GR-ConvNet[27]</td>
+                  <td class="px-2 py-2 text-center">82.7</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">TFGrasp[28]</td>
+                  <td class="px-2 py-2 text-center">83.3</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">SKGNet[29]</td>
+                  <td class="px-2 py-2 text-center">86.1</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">SPANet[30]</td>
+                  <td class="px-2 py-2 text-center">86.7</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">EGNet[5]</td>
+                  <td class="px-2 py-2 text-center">87.1</td>
+                </tr>
+                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
+                  <td class="px-2 py-2 text-center">D2TriPO-DETR (Ours)</td>
+                  <td class="px-2 py-2 text-center">88.6</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Third row of tables -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white p-6 rounded-lg shadow-soft">
+          <h4 class="font-semibold mb-4 text-center">Grasp Detection Results on Cornell Dataset</h4>
+          <div class="rounded overflow-hidden border table-container">
+            <table class="w-full">
+              <thead>
+                <tr>
+                  <th class="px-2 py-2 text-center">Models</th>
+                  <th class="px-2 py-2 text-center">Input</th>
+                  <th class="px-2 py-2 text-center">Accuracy (%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">TFGrasp[28]</td>
+                  <td class="px-2 py-2 text-center">RGB</td>
+                  <td class="px-2 py-2 text-center">96.78</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">TFGrasp[28]</td>
+                  <td class="px-2 py-2 text-center">RGBD</td>
+                  <td class="px-2 py-2 text-center">97.99</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">DSNet[33]</td>
+                  <td class="px-2 py-2 text-center">RGBD</td>
+                  <td class="px-2 py-2 text-center">98.31</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Yang[34]</td>
+                  <td class="px-2 py-2 text-center">RGB</td>
+                  <td class="px-2 py-2 text-center">98.74</td>
+                </tr>
+                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
+                  <td class="px-2 py-2 text-center">D2TriPO-DETR (Ours)</td>
+                  <td class="px-2 py-2 text-center">RGB</td>
+                  <td class="px-2 py-2 text-center">98.87</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experiment setup section -->
+    <section class="mt-12 uniform-width">
+      <h3 class="font-semibold text-xl text-center mb-6">Experiment setup</h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        <div class="bg-white rounded-lg p-4 shadow-soft text-center image-container">
+          <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/7.png" 
+               alt="Fig.7: Experiment Setup" 
+               class="w-full rounded figure-img"
+               onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.7: Image not available';">
+          <p class="mt-2 text-sm text-gray-600">Fig.7: Experiment Setup</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-soft">
+          <h4 class="font-semibold mb-4 text-center">Evaluation under Low-Light and Occlusion Conditions</h4>
+          <div class="rounded overflow-hidden border table-container">
+            <table class="w-full">
+              <thead>
+                <tr>
+                  <th class="px-2 py-2 text-center">Dataset</th>
+                  <th class="px-2 py-2 text-center">Object Detection Recall (%)</th>
+                  <th class="px-2 py-2 text-center">Object Detection Precision (%)</th>
+                  <th class="px-2 py-2 text-center">IA (%)</th>
+                  <th class="px-2 py-2 text-center">Accuracy (%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Lowlight L1</td>
+                  <td class="px-2 py-2 text-center">89.5</td>
+                  <td class="px-2 py-2 text-center">76.8</td>
+                  <td class="px-2 py-2 text-center">45.6</td>
+                  <td class="px-2 py-2 text-center">80.1</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Lowlight L2</td>
+                  <td class="px-2 py-2 text-center">82.7</td>
+                  <td class="px-2 py-2 text-center">74.1</td>
+                  <td class="px-2 py-2 text-center">33.1</td>
+                  <td class="px-2 py-2 text-center">78.6</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Lowlight L3</td>
+                  <td class="px-2 py-2 text-center">69.3</td>
+                  <td class="px-2 py-2 text-center">72.2</td>
+                  <td class="px-2 py-2 text-center">22.9</td>
+                  <td class="px-2 py-2 text-center">67.0</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Occlusion L1</td>
+                  <td class="px-2 py-2 text-center">98.0</td>
+                  <td class="px-2 py-2 text-center">97.1</td>
+                  <td class="px-2 py-2 text-center">82.0</td>
+                  <td class="px-2 py-2 text-center">85.4</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Occlusion L2</td>
+                  <td class="px-2 py-2 text-center">97.8</td>
+                  <td class="px-2 py-2 text-center">97.0</td>
+                  <td class="px-2 py-2 text-center">80.4</td>
+                  <td class="px-2 py-2 text-center">83.8</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-slate-50">
+                  <td class="px-2 py-2 text-center">Occlusion L3</td>
+                  <td class="px-2 py-2 text-center">96.9</td>
+                  <td class="px-2 py-2 text-center">96.1</td>
+                  <td class="px-2 py-2 text-center">79.8</td>
+                  <td class="px-2 py-2 text-center">83.1</td>
+                </tr>
+                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
+                  <td class="px-2 py-2 text-center">Original dataset</td>
+                  <td class="px-2 py-2 text-center">98.0</td>
+                  <td class="px-2 py-2 text-center">97.2</td>
+                  <td class="px-2 py-2 text-center">84.7</td>
+                  <td class="px-2 py-2 text-center">88.6</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Real-World Experiment section -->
+    <section id="summary" class="mt-10 bg-white p-6 rounded-lg shadow-soft uniform-width">
+      <h4 class="font-semibold text-justify">Real-World Experiment</h4>
+      <p class="mt-3 text-gray-700 leading-relaxed text-justify">In the <strong>cluttered</strong> setting objects are placed separately to test detection among nearby items. The <strong>stacked</strong> setting introduces occlusions that require not only detection and grasp estimation but also reasoning about manipulation order to avoid failures. Our pipeline outputs detections, grasp candidates, and stacking relations in parallel; detections map to fixed queries to produce object indices and update an adjacency matrix P. If P is all-zero all objects are selectable; otherwise successive powers of P identify top-layer candidates. We keep grasp candidates with IoU &gt; 0.5, rank them by confidence, and execute high-confidence candidates via inverse kinematics with closed-loop verification, updating P after each grasp–place cycle. D2TriPO-DETR shows superior relation recognition and sequence-planning, enabling robust ordered grasping in stacked scenes.</p>
     </section>
 
     <!-- Fig 8 centered with description -->
@@ -234,12 +597,6 @@
           </table>
         </div>
       </div>
-    </section>
-
-    <!-- Concise descriptive paragraph -->
-    <section id="summary" class="mt-10 bg-white p-6 rounded-lg shadow-soft uniform-width">
-      <h4 class="font-semibold text-justify">Real-World Experiment</h4>
-      <p class="mt-3 text-gray-700 leading-relaxed text-justify">In the <strong>cluttered</strong> setting objects are placed separately to test detection among nearby items. The <strong>stacked</strong> setting introduces occlusions that require not only detection and grasp estimation but also reasoning about manipulation order to avoid failures. Our pipeline outputs detections, grasp candidates, and stacking relations in parallel; detections map to fixed queries to produce object indices and update an adjacency matrix P. If P is all-zero all objects are selectable; otherwise successive powers of P identify top-layer candidates. We keep grasp candidates with IoU &gt; 0.5, rank them by confidence, and execute high-confidence candidates via inverse kinematics with closed-loop verification, updating P after each grasp–place cycle. D2TriPO-DETR shows superior relation recognition and sequence-planning, enabling robust ordered grasping in stacked scenes.</p>
     </section>
 
     <!-- Fig 9 + Fig 10 sections -->
