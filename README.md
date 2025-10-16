@@ -53,45 +53,39 @@ Vision-based grasping, though widely employed for industrial and household appli
 
 <div align="center">
 
+### Object Detection Performance
+
 <table>
 <tr>
 <td valign="top">
 
-### Grasp detection (VMRD)
+#### Object Detection (VMRD)
 
-<table>
-  <tr><th align="left">Model</th><th align="right">Accuracy (%)</th></tr>
-  <tr><td>FCGN[25]</td><td align="right">54.5</td></tr>
-  <tr><td>VMRN[3]</td><td align="right">70.5</td></tr>
-  <tr><td>SE-ResUNet[26]</td><td align="right">81.2</td></tr>
-  <tr><td>GR-ConvNet[27]</td><td align="right">82.7</td></tr>
-  <tr><td>TFGrasp[28]</td><td align="right">83.3</td></tr>
-  <tr><td>SKGNet[29]</td><td align="right">86.1</td></tr>
-  <tr><td>SPANet[30]</td><td align="right">86.7</td></tr>
-  <tr><td>EGNet[5]</td><td align="right">87.1</td></tr>
-  <tr><td><strong>D2TriPO-DETR (Ours)</strong></td><td align="right"><strong>88.6</strong></td></tr>
-</table>
+<table> <tr><th align="left">Model</th><th align="right">Recall (%)</th><th align="right">Precision (%)</th></tr> <tr><td>VSE[23]</td><td align="right">89.2</td><td align="right">90.2</td></tr> <tr><td>GrRN[19]</td><td align="right">91.9</td><td align="right">94.8</td></tr> <tr><td><strong>D2TriPO-DETR (Ours)</strong></td><td align="right"><strong>98.0</strong></td><td align="right"><strong>97.2</strong></td></tr> </table></td><td valign="top" style="padding-left: 40px;">
 
-</td>
+#### Manipulation Relationship (VMRD)
 
-<td valign="top" style="padding-left: 40px;">
+<table> <tr><th align="left">Model</th><th align="right">OR (%)</th><th align="right">OP (%)</th><th align="right">IA (%)</th></tr> <tr><td>Mutli-Task CNN[8]</td><td align="right">86.0</td><td align="right">88.8</td><td align="right">67.1</td></tr> <tr><td>VMRN-RN101[4]</td><td align="right">85.4</td><td align="right">85.5</td><td align="right">65.8</td></tr> <tr><td>VMRN-VGG101[4]</td><td align="right">86.3</td><td align="right">88.8</td><td align="right">68.4</td></tr> <tr><td>GVMRN-RF-RN101[24]</td><td align="right">86.9</td><td align="right">87.5</td><td align="right">68.8</td></tr> <tr><td>GVMRN-RF-VGG101[24]</td><td align="right">88.7</td><td align="right">89.5</td><td align="right">70.2</td></tr> <tr><td>Adj-Net-RN50[7]</td><td align="right">88.9</td><td align="right">91.5</td><td align="right">75.0</td></tr> <tr><td>Adj-Net-RN101[7]</td><td align="right">89.8</td><td align="right">91.5</td><td align="right">77.3</td></tr> <tr><td>GrRN[19]</td><td align="right">91.2</td><td align="right">93.1</td><td align="right">78.0</td></tr> <tr><td><strong>D2TriPO-DETR (Ours)</strong></td><td align="right"><strong>92.3</strong></td><td align="right"><strong>94.3</strong></td><td align="right"><strong>84.7</strong></td></tr> </table></td> </tr> </table>
 
-### Grasp detection (Cornell)
+### Detailed Relationship Analysis
 
-<table>
-  <tr><th align="left">Model</th><th align="center">Input</th><th align="right">Accuracy (%)</th></tr>
-  <tr><td>TFGrasp[28]</td><td align="center">RGB</td><td align="right">96.78</td></tr>
-  <tr><td>TFGrasp[28]</td><td align="center">RGBD</td><td align="right">97.99</td></tr>
-  <tr><td>DSNet[33]</td><td align="center">RGBD</td><td align="right">98.31</td></tr>
-  <tr><td>Yang[34]</td><td align="center">RGB</td><td align="right">98.74</td></tr>
-  <tr><td><strong>D2TriPO-DETR (Ours)</strong></td><td align="center">RGB</td><td align="right"><strong>98.87</strong></td></tr>
-</table>
+<table> <tr> <td valign="top">
 
-</td>
-</tr>
-</table>
+#### Manipulation Relationship IA-X (VMRD)
 
-</div>
+<table> <tr><th align="left">Model</th><th align="right">IA-2 (%)</th><th align="right">IA-3 (%)</th><th align="right">IA-4 (%)</th><th align="right">IA-5 (%)</th></tr> <tr><td>Mutli-Task CNN[8]</td><td align="right">87.7</td><td align="right">64.1</td><td align="right">56.6</td><td align="right">72.9</td></tr> <tr><td>GVMRN-RF-RN101[24]</td><td align="right">91.4</td><td align="right">69.2</td><td align="right">61.2</td><td align="right">57.5</td></tr> <tr><td>GVMRN-RF-VGG101[24]</td><td align="right">92.9</td><td align="right">70.3</td><td align="right">63.8</td><td align="right">60.3</td></tr> <tr><td>Adj-Net-RN50[7]</td><td align="right">87.3</td><td align="right">74.5</td><td align="right">69.8</td><td align="right">72.6</td></tr> <tr><td>Adj-Net-RN101[7]</td><td align="right">88.7</td><td align="right">75.2</td><td align="right">75.0</td><td align="right">76.7</td></tr> <tr><td>GrRN[19]</td><td align="right">92.3</td><td align="right">76.6</td><td align="right">74.5</td><td align="right">74.3</td></tr> <tr><td><strong>D2TriPO-DETR (Ours)</strong></td><td align="right"><strong>93.8</strong></td><td align="right"><strong>82.8</strong></td><td align="right"><strong>81.1</strong></td><td align="right"><strong>87.1</strong></td></tr> </table></td><td valign="top" style="padding-left: 40px;">
+
+#### Grasp detection (VMRD)
+
+<table> <tr><th align="left">Model</th><th align="right">Accuracy (%)</th></tr> <tr><td>FCGN[25]</td><td align="right">54.5</td></tr> <tr><td>VMRN[3]</td><td align="right">70.5</td></tr> <tr><td>SE-ResUNet[26]</td><td align="right">81.2</td></tr> <tr><td>GR-ConvNet[27]</td><td align="right">82.7</td></tr> <tr><td>TFGrasp[28]</td><td align="right">83.3</td></tr> <tr><td>SKGNet[29]</td><td align="right">86.1</td></tr> <tr><td>SPANet[30]</td><td align="right">86.7</td></tr> <tr><td>EGNet[5]</td><td align="right">87.1</td></tr> <tr><td><strong>D2TriPO-DETR (Ours)</strong></td><td align="right"><strong>88.6</strong></td></tr> </table></td> </tr> </table>
+
+### Cross-Dataset Performance
+
+<table> <tr> <td valign="top">
+
+#### Grasp detection (Cornell)
+
+<table> <tr><th align="left">Model</th><th align="center">Input</th><th align="right">Accuracy (%)</th></tr> <tr><td>TFGrasp[28]</td><td align="center">RGB</td><td align="right">96.78</td></tr> <tr><td>TFGrasp[28]</td><td align="center">RGBD</td><td align="right">97.99</td></tr> <tr><td>DSNet[33]</td><td align="center">RGBD</td><td align="right">98.31</td></tr> <tr><td>Yang[34]</td><td align="center">RGB</td><td align="right">98.74</td></tr> <tr><td><strong>D2TriPO-DETR (Ours)</strong></td><td align="center">RGB</td><td align="right"><strong>98.87</strong></td></tr> </table></td> </tr> </table></div>
 
 > All D2TriPO-DETR experiments reported here used a total batch size of 4 (see code for implementation details).
 
