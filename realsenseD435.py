@@ -54,13 +54,13 @@ class Camera(object):
         return color_image, depth_image
     
     def get_frame(self):
-        frames = self.pipeline.wait_for_frames() # 获得frame (包括彩色，深度图)
-        # 创建对齐对象
-        align_to = rs.stream.color            # rs.align允许我们执行深度帧与其他帧的对齐
-        align = rs.align(align_to)            # “align_to”是我们计划对齐深度帧的流类型。
+        frames = self.pipeline.wait_for_frames() # Get frame (including color and depth map)
+        # Creating Alignment Objects
+        align_to = rs.stream.color            # rs.align allows us to perform alignment of the depth frame with other frames
+        align = rs.align(align_to)            # "align_to" is the type of stream we plan to align the depth frames to.
         aligned_frames = align.process(frames)
-        # 获取对齐的帧
-        aligned_depth_frame = aligned_frames.get_depth_frame()  # aligned_depth_frame是对齐的深度图
+        # Get aligned frames
+        aligned_depth_frame = aligned_frames.get_depth_frame()  # aligned_depth_frame is the aligned depth map
         color_frame = aligned_frames.get_color_frame()
         colorizer = rs.colorizer()
         depthx_image = np.asanyarray(aligned_depth_frame.get_data())

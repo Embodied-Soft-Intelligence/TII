@@ -124,8 +124,7 @@ class UR_Robot:
     '''
     move_j_p(self, tool_configuration,k_acc=1,k_vel=1,t=0,r=0)
     input:tool_configuration=[x y z r p y]
-    其中x y z为三个轴的目标位置坐标，单位为米
-    r p y ，单位为弧度
+    Where x, y, and z are the target position coordinates of the three axes, in meters. r, p, and y are in radians.
     '''
     def move_j_p(self, tool_configuration,k_acc=1,k_vel=1,t=0,r=0):
         self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -277,7 +276,7 @@ class UR_Robot:
         R = self.rpy2R(rpy)
         # R to rotating_vector
         return self.R2rotating_vector(R)
-    # 将旋转矢量转为欧拉角
+    # Convert rotation vector to Euler angles
     def rotvec2rpy(self, pose):
         rx, ry, rz = pose
         theta = np.sqrt(rx * rx + ry * ry + rz * rz)
@@ -299,7 +298,7 @@ class UR_Robot:
         r33 = kz * kz * vth + cth
 
         beta = np.arctan2(-r31, np.sqrt(r11 * r11 + r21 * r21))
-        # 这里需要判断分母为cos(beta)=0的情况
+        # Here we need to determine the case where the denominator is cos(beta)=0
         if beta > np.deg2rad(89.99):
             beta = np.deg2rad(89.99)
             alpha = 0
@@ -321,7 +320,7 @@ class UR_Robot:
 
         return rpy
 
-    def rpy2R(self,rpy): # [r,p,y] 单位rad
+    def rpy2R(self,rpy): # [r,p,y] Unit rad
         rot_x = np.array([[1, 0, 0],
                           [0, math.cos(rpy[0]), -math.sin(rpy[0])],
                           [0, math.sin(rpy[0]), math.cos(rpy[0])]])
@@ -392,10 +391,10 @@ class UR_Robot:
 
     def plane_grasp(self, position, yaw=0, open_size=0.45, k_acc=0.8,k_vel=0.8,speed=255, force=125):
         rpy = [-np.pi, 0, np.pi]
-        # 判定抓取的位置是否处于工作空间
+        # Determine whether the captured position is in the workspace
         for i in range(3):
             position[i] = min(max(position[i],self.workspace_limits[i][0]),self.workspace_limits[i][1])
-        # 判定抓取的角度RPY是否在规定范围内 [-pi,pi]
+        # Determine whether the grasping angle RPY is within the specified range [-pi,pi]
         for i in range(3):
             if rpy[i] > np.pi:
                 rpy[i] -= 2*np.pi
@@ -437,75 +436,6 @@ class UR_Robot:
         self.move_j_p(grasp_home)
         print("grasp success!")
         return True
-
-    # def plane_push(self, position, move_orientation=0, length=0.1):
-    #     for i in range(2):
-    #         position[i] = min(max(position[i],self.workspace_limits[i][0]+0.1),self.workspace_limits[i][1]-0.1)
-    #     position[2] = min(max(position[2],self.workspace_limits[2][0]),self.workspace_limits[2][1])
-    #     print('Executing: push at (%f, %f, %f) and the orientation is %f' % (position[0], position[1], position[2],move_orientation))
-
-    #     push_home = [0.4, 0, 0.4, -np.pi, 0, 0]
-    #     self.move_j_p(push_home,k_acc=1, k_vel=1)  # pre push position(push home)
-    #     # self.close_gripper()
-
-    #     self.move_j_p([position[0],position[1],position[2]+0.1,-np.pi,0,0],k_acc=1,k_vel=1)
-    #     self.move_j_p([position[0], position[1], position[2], -np.pi, 0, 0], k_acc=0.6, k_vel=0.6)
-
-    #     # compute the destination pos
-    #     destination_pos = [position[0] + length * math.cos(move_orientation),position[1] + length * math.sin(move_orientation),position[2]]
-    #     self.move_l(destination_pos+[-np.pi, 0, 0], k_acc=0.5, k_vel=0.5)
-    #     self.move_j_p([destination_pos[0],destination_pos[1],destination_pos[2]+0.1,-np.pi,0,0],k_acc=0.6, k_vel=0.6)
-
-    #     # go back push-home
-    #     self.move_j_p(push_home, k_acc=1, k_vel=1)
-
-    # def grasp(self, position, rpyNone, open_size=0.85, k_acc=0.8, k_vel=0.8, speed=255, force=125):
-
-    #     # 判定抓取的位置是否处于工作空间
-    #     if rpy is None:
-    #         rpy = [-np.pi, 0, 0]
-    #     for i in range(3):
-    #         position[i] = min(max(position[i], self.workspace_limits[i][0]), self.workspace_limits[i][1])
-    #     # 判定抓取的角度RPY是否在规定范围内 [0.5*pi,1.5*pi]
-    #     for i in range(3):
-    #         if rpy[i] > np.pi:
-    #             rpy[i] -= 2 * np.pi
-    #         elif rpy[i] < -np.pi:
-    #             rpy[i] += 2 * np.pi
-    #     print('Executing: grasp at (%f, %f, %f) by the RPY angle (%f, %f, %f)' \
-    #           % (position[0], position[1], position[2], rpy[0], rpy[1], rpy[2]))
-
-    #     # pre work
-    #     grasp_home = [0.4, 0, 0.4, -np.pi, 0, 0]  # you can change me
-    #     self.move_j_p(grasp_home, k_acc, k_vel)
-    #     open_pos = int(-300 * open_size + 255)  # open size:0~0.85cm --> open pos:255~0
-    #     self.gripper.move_and_wait_for_pos(open_pos, speed, force)
-    #     self.log_gripper_info()
-
-    #     # Firstly, achieve pre-grasp position
-    #     pre_position = copy.deepcopy(position)
-    #     pre_position[2] = pre_position[2] + 0.1  # z axis
-    #     print(pre_position)
-    #     self.move_j_p(pre_position + rpy, k_acc, k_vel)
-
-    #     # Second，achieve grasp position
-    #     self.move_l(position + rpy, 0.6 * k_acc, 0.6 * k_vel)
-    #     self.close_gripper(speed, force)
-    #     self.move_l(pre_position + rpy, 0.6 * k_acc, 0.6 * k_vel)
-    #     if (self.check_grasp()):
-    #         print("Check grasp fail! ")
-    #         self.move_j_p(grasp_home)
-    #         return False
-    #     # Third,put the object into box
-    #     box_position = [0.63, 0, 0.25, -np.pi, 0, 0]  # you can change me!
-    #     self.move_j_p(box_position, k_acc, k_vel)
-    #     box_position[2] = 0.1  # down to the 10cm
-    #     self.move_l(box_position, k_acc, k_vel)
-    #     self.open_gripper(speed, force)
-    #     box_position[2] = 0.25
-    #     self.move_l(box_position, k_acc, k_vel)
-    #     self.move_j_p(grasp_home)
-    #     print("grasp success!")
 
 if __name__ =="__main__":
     ur_robot = UR_Robot()

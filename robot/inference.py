@@ -25,18 +25,18 @@ import time
 import matplotlib.pyplot as plt
 from UR_Robot import UR_Robot
 from threading import Thread
-# 绘制旋转矩形的函数
+# Function to draw a rotated rectangle
 def draw_rotated_rectangle(image, x, y, w, h, angle, color=(151, 169, 91), thickness=2):
-    # 创建旋转矩形
+    # Create a rotated rectangle
     rect = ((x, y), (w, h), angle)
-    # 获取旋转矩形的四个顶点
+    # Get the four vertices of the rotated rectangle
     box = cv2.boxPoints(rect)
-    box = np.int0(box)  # 将顶点坐标转换为整数
-    # 绘制旋转矩形
+    box = np.int0(box)  # Convert vertex coordinates to integers
+    # Draw a rotated rectangle
     cv2.polylines(image, [box], isClosed=True, color=color, thickness=thickness)
 
 def draw_rectangle(image, xmin, ymin, w, h, idx, lable_id, color=(138, 239, 242), thickness=2):
-    # 绘制普通矩形
+    # Draw a normal rectangle
     label=['banana','watch','pliers','toothbrush','wrench',
             'towel','knife','badminton','tape','charger',
             'pen','box','umbrella','apple','wallet',
@@ -109,7 +109,7 @@ class PostProcess(nn.Module):
         
         return results,adjs
 def get_rotated_box_vertices(x, y, w, h, alpha):
-    """计算旋转矩形的四个顶点坐标"""
+    """Calculate the coordinates of the four vertices of the rotated rectangle"""
     cx, cy = x, y
     hw, hh = w / 2, h / 2
     alpha = math.radians(alpha)
@@ -126,7 +126,7 @@ def get_rotated_box_vertices(x, y, w, h, alpha):
 
 
 def get_all_rotated_boxes_vertices(boxes_grasp):
-    """计算批次中所有旋转矩形的顶点坐标"""
+    """Calculate the vertex coordinates of all rotated rectangles in the batch"""
     batch_size, num_boxes, _ = boxes_grasp.shape
     all_vertices = []
     for i in range(batch_size):
@@ -141,7 +141,7 @@ def get_all_rotated_boxes_vertices(boxes_grasp):
 
 def load_model(model_path, args):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print("[INFO] 当前使用{}做推断".format(device))
+    print("[INFO] Currently using {} for inference".format(device))
     model, _, _ = build_dab_deformable_detr(args)
     model.cuda()
     model.eval()
@@ -153,20 +153,20 @@ def load_model(model_path, args):
     print("load model success")
     return model
 def calculate_iou(box1, box2):
-    """计算两个旋转矩形框的IoU"""
-    # 获取两个旋转矩形的顶点坐标
+    """Calculate the IoU of two rotated rectangles"""
+    # Get the vertex coordinates of two rotated rectangles
     vertices1 = get_rotated_box_vertices(*box1)
     vertices2 = get_rotated_box_vertices(*box2)
     
-    # 创建两个多边形
+    # Create two polygons
     poly1 = Polygon(vertices1)
     poly2 = Polygon(vertices2)
     
-    # 计算交集和并集面积
+    # Calculate the area of ​​intersection and union
     inter_area = poly1.intersection(poly2).area
     union_area = poly1.union(poly2).area
     
-    # 计算IoU
+    # Calculating IoU
     iou = inter_area / union_area
     return iou
 
@@ -177,15 +177,15 @@ def find_best_grasp(all_dt_grasp,all_dt):
     all_idx_gt=[]
     e=[]
     for i in range(len(all_dt)):
-        bbox0 = all_dt[i]['bbox']  # 假设 bbox0 是一个 tensor，形状为 (4,)
+        bbox0 = all_dt[i]['bbox']  # Assume bbox0 is a tensor with shape (4,)
         bbox=[0]*4
         bbox[0]=bbox0[0]+bbox0[2]/2
         bbox[1]=bbox0[1]+bbox0[3]/2
         bbox[2]=bbox0[2]
         bbox[3]=bbox0[3]
-        bbox.append(0)            # 在 list 的末尾添加一个 0        
-        all_bbox.append(bbox)            # 收集到列表 b 中
-    # all_bbox = np.array(all_bbox,dtype=np.float32)             # 最终将列表 b 转换为 NumPy 数组，形状为 (n, 5)
+        bbox.append(0)            # Add a 0 to the end of the list        
+        all_bbox.append(bbox)            # Collect into list b
+    # all_bbox = np.array(all_bbox,dtype=np.float32)             # Finally, the list b is converted into a NumPy array with shape (n, 5)
 
     for i in range(len(all_dt_grasp)):
         for j in range(len(all_dt)):
@@ -211,7 +211,7 @@ def find_best_grasp(all_dt_grasp,all_dt):
     best_grasp=[]
     for i in range(len(all_dt)):
         if i in all_idx_gt:
-            indices = [j for j, x in enumerate(all_idx_gt) if x == i]  # 查找该数的索引
+            indices = [j for j, x in enumerate(all_idx_gt) if x == i]  # Find the index of the number
             for _ , y in  enumerate(indices):
                 score.append(all_dt_grasp[y]['score_grasp'])
             tmp=max(score)
@@ -263,25 +263,25 @@ def prepare_for_coco_detection(predictions):
     return coco_results,grasp_results
 def draw_adj(matrix,img_name,output_folder2):
     import matplotlib.pyplot as plt
-    # 创建热力图
+    # Creating a heatmap
     plt.imshow(matrix, cmap='hot', interpolation='nearest')
-    # plt.colorbar()  # 添加颜色条
+    # plt.colorbar()  # Add a color bar
     plt.grid(color='red', linewidth=1, linestyle='-', alpha=0.7)
 
-    # 设置 x 轴和 y 轴的刻度
+    # Set the scale of the x-axis and y-axis
     plt.xticks(ticks=np.arange(0, matrix.shape[1]), labels=np.arange(1, matrix.shape[1] + 1))
     plt.yticks(ticks=np.arange(0, matrix.shape[0]), labels=np.arange(1, matrix.shape[0] + 1))
 
-    # 显示网格线
+    # Show Gridlines
     plt.gca().set_xticks(np.arange(0.5, matrix.shape[1], 1), minor=True)
     plt.gca().set_yticks(np.arange(0.5, matrix.shape[0], 1), minor=True)
-    # 绘制小刻度的网格线
+    # Draw minor scale grid lines
     plt.gca().grid(which='minor', color='blue', linestyle='-', linewidth=2)
 
-    # 隐藏主刻度的网格线
-    plt.gca().grid(which='major', linestyle='None')  # 不绘制主刻度的网格线
+    # Hide the grid lines for the major scale
+    plt.gca().grid(which='major', linestyle='None')  # Do not draw grid lines for major ticks
     plt.gca().xaxis.set_ticks_position('top')
-    plt.gca().xaxis.set_label_position('top')  # 可选：如果需要设置标签位置
+    plt.gca().xaxis.set_label_position('top')  # Optional: Set label position if needed
     base_name = os.path.splitext(img_name)[0]
     png_name = base_name + '.png'
     output_filepath = os.path.join(output_folder2, png_name)
@@ -290,7 +290,7 @@ def draw_adj(matrix,img_name,output_folder2):
     plt.savefig(output_filepath)
     plt.close()
 
-    print(f"热力图已保存到：{output_filepath}")
+    print(f"Heatmap saved to：{output_filepath}")
 def grasp_order(a):
     A=[]
     B=[]
@@ -316,85 +316,84 @@ def grasp_order(a):
         return [0]
 def extract_max_depth_in_rotated_rect(depth_image, rect):
     """
-    提取深度图像中旋转矩形框所包含区域的最大深度值。
+    Extract the maximum depth value of the area contained in the rotated rectangular box in the depth image.
 
-    :param depth_image: 深度图像，numpy 数组，形状为 (480, 640)。
-    :param rect: 旋转矩形框，格式为 (x, y, w, h, alpha)，
-                 其中 x, y 为中心坐标，w, h 为宽和高，alpha 为旋转角度（以度为单位）。
-    :return: 矩形框内的最大深度值。
+    :param depth_image: Depth image, numpy array, shape (480, 640).
+    :param rect: Rotate the rectangle in the format (x, y, w, h, alpha), where x and y are the center coordinates, w and h are the width and height, and alpha is the rotation angle (in degrees).
+    :return: The maximum depth value within the rectangle.
     """
-    # 解构矩形框参数
+    # Deconstructing the rectangle parameters
     x, y, w, h, alpha = rect[0]
 
-    # 将角度转换为弧度
+    # Convert degrees to radians
     alpha_rad = np.deg2rad(alpha)
 
-    # 生成旋转矩形框的顶点
+    # Generate the vertices of the rotated rectangle
     rect_vertices = cv2.boxPoints(((x, y), (w, h), alpha))
-    rect_vertices = np.int0(rect_vertices)  # 转换为整数坐标
+    rect_vertices = np.int0(rect_vertices)  # Convert to integer coordinates
 
-    # 创建一个掩码图像，大小与深度图像相同
+    # Create a mask image with the same size as the depth image
     mask = np.zeros_like(depth_image, dtype=np.uint8)
 
-    # 在掩码上绘制旋转矩形框
+    # Draw a rotated rectangle on the mask
     cv2.fillPoly(mask, [rect_vertices], 255)
 
-    # 使用掩码提取深度图像中的感兴趣区域
+    # Extracting regions of interest in depth images using masks
     masked_depth = cv2.bitwise_and(depth_image, depth_image, mask=mask)
 
-    # 获取矩形框区域的最大深度值
+    # Get the maximum depth value of the rectangular area
     min_depth = np.min(masked_depth[np.nonzero(masked_depth)])
 
     return min_depth
 def visualize_matrix(matrix, color_0=[211/255,235/255,248/255], color_1=[246/255,174/255,69/255], edge_color=[139/255,139/255,140/255], 
                      edge_width=5, font_size=12, save_path=True):
     """
-    可视化0-1矩阵的函数，支持RGB颜色定义，并调整网格和坐标显示。
+    Functions for visualizing 0-1 matrices, supporting RGB color definitions, and adjusting grid and coordinate display.
     
-    参数:
-        - matrix: numpy.ndarray, 包含0和1的二维矩阵
-        - color_0: tuple, 表示0对应的RGB颜色，默认白色 (1, 1, 1)
-        - color_1: tuple, 表示1对应的RGB颜色，默认黑色 (0, 0, 0)
-        - edge_color: tuple, 方格网格线的RGB颜色，默认灰色 (0.5, 0.5, 0.5)
-        - edge_width: int, 网格线和外围边框的宽度
-        - font_size: int, 索引数字的字体大小
-        - save_path: str, 保存图片的文件路径（包含文件名和扩展名，例如 'output/matrix_plot.png'）
+    Parameters:
+        - matrix: numpy.ndarray —— a 2D matrix containing values 0 and 1.
+        - color_0: tuple —— RGB color for entries equal to 0; default is white (1, 1, 1).
+        - color_1: tuple —— RGB color for entries equal to 1; default is black (0, 0, 0).
+        - edge_color: tuple —— RGB color for the grid lines; default is gray (0.5, 0.5, 0.5).
+        - edge_width: int —— width of the grid lines and the outer border.
+        - font_size: int —— font size for the index numbers.
+        - save_path: str —— file path where the image will be saved (including file name and extension), e.g. 'output/matrix_plot.png'.
     """
     if not isinstance(matrix, np.ndarray) or matrix.ndim != 2:
-        raise ValueError("输入的矩阵必须是二维的 numpy.ndarray")
+        raise ValueError("The input matrix must be two-dimensional numpy.ndarray")
     
-    # 创建自定义颜色映射
+    # Creating a custom color map
     cmap = ListedColormap([color_0, color_1])
     
-    # 绘制矩阵
+    # Plotting the Matrix
     plt.figure(figsize=(matrix.shape[1] * 0.7, matrix.shape[0] * 0.7))
     plt.imshow(matrix, cmap=cmap, interpolation="none")
 
-    # 添加网格线
+    # Adding Grid Lines
     plt.gca().set_xticks(np.arange(-0.5, matrix.shape[1], 1), minor=True)
     plt.gca().set_yticks(np.arange(-0.5, matrix.shape[0], 1), minor=True)
     plt.gca().grid(which="minor", color=edge_color, linestyle='-', linewidth=edge_width, zorder=0)
     
-    # 添加外围边框（略微调整宽度以匹配视觉效果）
+    # Add outer border (adjust width slightly to match visual effect)
     rect = patches.Rectangle(
-        (-0.5, -0.5),  # 左下角坐标
-        matrix.shape[1],  # 矩阵宽度
-        matrix.shape[0],  # 矩阵高度
-        linewidth=edge_width * 1.5,  # 稍微调整，使视觉上匹配
+        (-0.5, -0.5),  # Lower left corner coordinates
+        matrix.shape[1],  # Matrix width
+        matrix.shape[0],  # Matrix Height
+        linewidth=edge_width * 1.5,  # Slightly adjusted to make them visually match
         edgecolor=edge_color,
         facecolor='none',
-        zorder=1  # 确保在网格线上方绘制
+        zorder=1  # Make sure to draw above the grid lines
     )
     plt.gca().add_patch(rect)
 
-    # 设置坐标轴
+    # Setting up the axes
     plt.xticks(ticks=np.arange(matrix.shape[1]), labels=np.arange(matrix.shape[1]), fontsize=font_size)
     plt.yticks(ticks=np.arange(matrix.shape[0]), labels=np.arange(matrix.shape[0]), fontsize=font_size)
 
-    # 将 x 轴坐标放到上方
+    # Place the x-axis coordinate at the top
     plt.tick_params(axis='x', labeltop=True, labelbottom=False)
     
-    # 移除外部边框
+    # Remove outer border
     plt.tick_params(which="minor", size=0)
     plt.tick_params(axis='both', which='major', length=0)
     plt.gca().spines['top'].set_visible(False)
@@ -402,16 +401,16 @@ def visualize_matrix(matrix, color_0=[211/255,235/255,248/255], color_1=[246/255
     plt.gca().spines['bottom'].set_visible(False)
     plt.gca().spines['left'].set_visible(False)
 
-    # 调整画布比例
+    # Adjust canvas scale
     plt.tight_layout()
     
-    # 保存图片
+    # Save Image
     if save_path:
         folder = os.path.dirname(save_path)
         if folder and not os.path.exists(folder):
-            os.makedirs(folder)  # 创建文件夹
+            os.makedirs(folder)  # Create a folder
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"图片已保存到: {save_path}")
+        print(f"The picture has been saved to: {save_path}")
 def process_image(model, color_img):
     # img = Image.open(imgfile).convert('RGB')
     image = color_img
@@ -446,13 +445,13 @@ def process_image(model, color_img):
     # image= cv2.imread(imgfile)
     for bbox in grasp:
         # bbox = item['bbox_grasp']
-        x, y, w, h, angle = bbox  # 解包为旋转矩形的参数
+        x, y, w, h, angle = bbox  # Unpacked into parameters of the rotated rectangle
         draw_rotated_rectangle(image, x=x, y=y, w=w, h=h, angle=angle)
     i=0
     for item in dt:       
         bbox = item['bbox']
         lable_id=item['category_id']
-        xmin, ymin, w, h= bbox  # 解包为旋转矩形的参数
+        xmin, ymin, w, h= bbox  # Unpacked into parameters of the rotated rectangle
         draw_rectangle(image, xmin=xmin, ymin=ymin, w=w, h=h, idx=i, lable_id=lable_id)
         i+=1
     return image,grasp,binary_matrix
@@ -463,7 +462,7 @@ def process_image(model, color_img):
     # cv2.imwrite(output_path, image)
     # print(f"Processed image saved to: {output_path}")
 
-    # # 示例矩阵 (你可以直接使用从 PyTorch Tensor 转换得到的 numpy 数组)
+    # # Example matrix (you can directly use the numpy array converted from PyTorch Tensor)
 
 
     # draw_adj(binary_matrix,img_name,output_folder2)
@@ -571,7 +570,7 @@ def grasp_action():
 def save_video():
     video_path = f'/home/pmh/Code/dab_deformable_resnet_5d_Rotate_Point_QK_nobias/robot/video/{int(time.time())}.mp4'
     fps, w, h = 30, 640, 480
-    mp4 = cv2.VideoWriter_fourcc(*'mp4v') # 视频格式
+    mp4 = cv2.VideoWriter_fourcc(*'mp4v') # Video Format
     wr  = cv2.VideoWriter(video_path, mp4, fps, (w, h), isColor=True)
     flag_V =0
     while True:
@@ -582,14 +581,14 @@ def save_video():
         if key & 0xFF == ord('s') :
             flag_V = 1
         if flag_V == 1:
-            wr.write(color_img)                # 保存RGB图像帧
-            print('...录制视频中...')
+            wr.write(color_img)                # Save RGB image frame
+            print('...Recording video...')
         if key & 0xFF == ord('q') or key == 27:
             cv2.destroyAllWindows()
-            print('...录制结束/直接退出...')
+            print('...End of recording/exit directly...')
             break
     wr.release()
-    print(f'，若保存视频，则视频保存在：{video_path}')
+    print(f',if you save the video, the video will be saved in:{video_path}')
     cv2.destroyAllWindows()
 # import time 
 if __name__ == "__main__":
@@ -652,19 +651,19 @@ if __name__ == "__main__":
     # tcp_port = 30003
     # tool_orientation = [-np.pi, 0, np.pi]
     # robot = UR_Robot(tcp_host_ip,tcp_port,is_use_robotiq85=True,is_use_camera=True)
-    # thread1 = Thread(target=grasp_action)  # 线程1：执行任务打印4个a
-    # # thread2 = Thread(target=save_video)  # 线程2：执行任务打印2个b
+    # thread1 = Thread(target=grasp_action)  # Thread 1: Execute task and print 4 a
+    # # thread2 = Thread(target=save_video)  # Thread 2: Execute task and print 2 b
     
-    # thread1.start()  # 线程1开始
-    # # thread2.start()  # 线程2开始
+    # thread1.start()  # Thread 1 starts
+    # # thread2.start()  # Thread 2 starts
     
-    # thread1.join()  # 等待线程1结束
-    # thread2.join()  # 等待线程2结束
+    # thread1.join()  # Wait for thread 1 to finish
+    # thread2.join()  # Wait for thread 2 to finish
 
 
     # video_path = f'/home/pmh/Code/dab_deformable_resnet_5d_Rotate_Point_QK_nobias/robot/{int(time.time())}.mp4'
     # fps, w, h = 30, 640, 480
-    # mp4 = cv2.VideoWriter_fourcc(*'mp4v') # 视频格式
+    # mp4 = cv2.VideoWriter_fourcc(*'mp4v') # Video Format
     # wr  = cv2.VideoWriter(video_path, mp4, fps, (w, h), isColor=True)
     # flag_V =0
     # while True:
@@ -675,14 +674,14 @@ if __name__ == "__main__":
     #     if key & 0xFF == ord('s') :
     #         flag_V = 1
     #     if flag_V == 1:
-    #         wr.write(color_img)                # 保存RGB图像帧
-    #         print('...录制视频中...')
+    #         wr.write(color_img)                # Save RGB image frame
+    #         print('...Recording video...')
     #     if key & 0xFF == ord('q') or key == 27:
     #         cv2.destroyAllWindows()
-    #         print('...录制结束/直接退出...')
+    #         print('...End of recording/exit directly...')
     #         break
     # wr.release()
-    # print(f'，若保存视频，则视频保存在：{video_path}')
+    # print(f',if you save the video, it will be saved in:{video_path}')
     # cv2.destroyAllWindows()
         # image=np.asanyarray(camera_color_img)
         # with torch.no_grad():

@@ -9,7 +9,7 @@ import numpy as np
 import cv2
 import cv2.aruco as aruco
 # from cv2.aruco import estimatePoseSingleMarkers
-# 提示没有aruco的看问题汇总
+# Tip: There is no aruco to see the problem summary
 import transforms3d as tfs
 
 tcp_host_ip = '192.168.56.10' # IP and port to robot arm as TCP client (UR5)
@@ -20,7 +20,7 @@ tool_orientation = [-np.pi, 0, np.pi]
 # Move robot to home pose
 robot = UR_Robot(tcp_host_ip,tcp_port,is_use_robotiq85=False,is_use_camera=False)
 
-# realsense初始化,配置摄像头与开启pipeline
+# Realsense initialization, camera configuration and pipeline opening
 pipeline = rs.pipeline()
 config = rs.config()
 config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
@@ -29,45 +29,45 @@ profile = pipeline.start(config)
 align_to = rs.stream.color
 align = rs.align(align_to)
 
-#获取jaka的末端位姿，xyz；弧度制rxryrz
+#Get the end position of Jaka, xyz; radian system rxryrz
 def get_jaka_gripper():
     tcp_pos = robot.parse_tcp_state_data(robot.get_state(),'cartesian_info')
     tcp_pos[3:6]=robot.rotvec2rpy(tcp_pos[3:6])
     return  tcp_pos
-# 获取对齐的rgb和深度图
+# Get aligned RGB and depth maps
 def get_aligned_images():
     frames = pipeline.wait_for_frames()
     aligned_frames = align.process(frames)
     aligned_depth_frame = aligned_frames.get_depth_frame()
     color_frame = aligned_frames.get_color_frame()
-    # 获取intelrealsense参数
+    # Get Intel Real Sense parameters
     intr = color_frame.profile.as_video_stream_profile().intrinsics
-    # 内参矩阵，转ndarray方便后续opencv直接使用
+    # Internal parameter matrix, converted to ndarray for subsequent direct use in opencv
     intr_matrix = np.array([
         [intr.fx, 0, intr.ppx], [0, intr.fy, intr.ppy], [0, 0, 1]
     ])
-    # 深度图-16位
+    # Depth Map - 16 bit
     depth_image = np.asanyarray(aligned_depth_frame.get_data())
-    # 深度图-8位
+    # Depth Map - 8 bit
     depth_image_8bit = cv2.convertScaleAbs(depth_image, alpha=0.03)
     pos = np.where(depth_image_8bit == 0)
     depth_image_8bit[pos] = 255
-    # rgb图
+    # RGB image
     color_image = np.asanyarray(color_frame.get_data())
-    # return: rgb图，深度图，相机内参，相机畸变系数(intr.coeffs)
+    # return: RGB image, depth map, camera internal parameters, camera distortion coefficient (intr.coeffs)
     return color_image, depth_image, intr_matrix, np.array(intr.coeffs)
 
-#获取标定板位姿
+#Get the calibration plate pose
 def get_realsense_mark(intr_matrix, intr_coeffs):
-    # 获取dictionary, 4x4的码，指示位50个
+    # Get dictionary, 4x4 code, 50 indicator bits
     aruco_dict = aruco.getPredefinedDictionary(aruco.DICT_4X4_1000)
-    # 创建detector parameters
+    # Create detector parameters
     parameters = aruco.DetectorParameters()
-    # 输入rgb图, aruco的dictionary, 相机内参, 相机的畸变参数
+    # Input RGB image, Aruco dictionary, camera internal parameters, camera distortion parameters
     detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
     corners, ids, rejected_img_points = detector.detectMarkers(rgb)
-    # 估计出aruco码的位姿，0.045对应markerLength参数，单位是meter
-    # rvec是旋转向量， tvec是平移向量
+    # Estimate the pose of the aruco code, 0.045 corresponds to the markerLength parameter, the unit is meter
+    # rvec is the rotation vector, tvec is the translation vector
     rvec, tvec, markerPoints = aruco.estimatePoseSingleMarkers(corners, 0.1, intr_matrix, intr_coeffs)
     # for i in range(rvec.shape[0]):
     #     cv2.drawFrameAxes(rgb, intr_matrix, intr_coeffs, rvec[i, :, :], tvec[i, :, :], 0.03)
@@ -84,7 +84,7 @@ if __name__ == "__main__":
         if key & 0xFF == ord('q') or key == 27:
             pipeline.stop()
             break
-        # 按键盘r记录g-b，m-c位姿
+        # Press r on the keyboard to record g-b, m-c posture
         elif key == ord('r'):
             hands.append(get_jaka_gripper())
             cameras.append(get_realsense_mark(intr_matrix,intr_coeffs))
@@ -93,29 +93,29 @@ if __name__ == "__main__":
             R_Hgs, R_Hcs = [], []
             T_Hgs, T_Hcs = [], []
             for camera in cameras:
-                #m-c的旋转矩阵和位移矩阵
+                # The rotation matrix and displacement matrix of m-c
                 c = camera[3:6]
-                # R_Hcs.append(tfs.quaternions.quat2mat((q[3], q[0], q[1], q[2]))) #四元素转旋转矩阵；相机读出x,y,z,w 使用该方法
-                camera_mat,j = cv2.Rodrigues((c[0],c[1],c[2])) #旋转矢量到旋转矩阵
+                # R_Hcs.append(tfs.quaternions.quat2mat((q[3], q[0], q[1], q[2]))) #Four-element rotation matrix; camera reads x, y, z, w using this method
+                camera_mat,j = cv2.Rodrigues((c[0],c[1],c[2])) # Rotation vector to rotation matrix
                 R_Hcs.append(camera_mat)
-                T_Hcs.append(np.array(camera[0:3])*1000) #统一单位   *1000
+                T_Hcs.append(np.array(camera[0:3])*1000) # Unified Unit   *1000
             for hand in hands:
-                # g-b的旋转矩阵和位移矩阵
+                # g-b rotation matrix and displacement matrix
                 g = hand[3:6]
-                #R_Hgs.append(tfs.euler.euler2mat(math.radians(g[0])... 'sxyz'))#如果读出角度，转弧度再计算
-                R_Hgs.append(tfs.euler.euler2mat(g[0], g[1], g[2], 'sxyz'))#欧拉角到旋转矩阵；
+                #R_Hgs.append(tfs.euler.euler2mat(math.radians(g[0])... 'sxyz'))# If you read the angle, convert it to radians and then calculate
+                R_Hgs.append(tfs.euler.euler2mat(g[0], g[1], g[2], 'sxyz'))# Euler angles to rotation matrix；
                 T_Hgs.append(np.array(hand[0:3])*1000)
             print("R_Hcs:",R_Hcs)
             print("T_Hcs:",T_Hcs)
             print("R_Hgs:",R_Hgs)
             print("T_Hgs:",T_Hgs)
-            #计算c-g
+            # Calculate c-g
             R_cam2gripper, t_cam2gripper = cv2.calibrateHandEye(R_Hgs, T_Hgs, R_Hcs, T_Hcs,
                                                                method=cv2.CALIB_HAND_EYE_PARK)
             RT_c2g = tfs.affines.compose(np.squeeze(t_cam2gripper), R_cam2gripper, [1, 1, 1])
             print("RT_c2g：",RT_c2g)
 
-            #根据计算 RT_c2g 推算出之前记录数据的机械臂末端相对基地移动矩阵
+            # Based on the calculation of RT_c2g, the movement matrix of the end of the manipulator relative to the base is calculated.
             final_pose = []
             for i in range(len(R_Hgs)):
                 RT_g2b = tfs.affines.compose(np.squeeze(T_Hgs[i]), R_Hgs[i], [1, 1, 1])
