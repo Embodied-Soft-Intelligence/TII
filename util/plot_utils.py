@@ -25,9 +25,6 @@ def plot_logs(logs, fields=('class_error', 'loss_bbox_unscaled', 'mAP'), ewm_col
     '''
     func_name = "plot_utils.py::plot_logs"
 
-    # verify logs is a list of Paths (list[Paths]) or single Pathlib object Path,
-    # convert single Path to list to avoid 'not iterable' error
-
     if not isinstance(logs, list):
         if isinstance(logs, PurePath):
             logs = [logs]

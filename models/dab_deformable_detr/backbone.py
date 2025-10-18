@@ -29,13 +29,6 @@ from .position_encoding import build_position_encoding
 
 
 class FrozenBatchNorm2d(torch.nn.Module):
-    """
-    BatchNorm2d where the batch statistics and the affine parameters are fixed.
-
-    Copy-paste from torchvision.misc.ops with added eps before rqsrt,
-    without which any other models than torchvision.models.resnet[18,34,50,101]
-    produce nans.
-    """
 
     def __init__(self, n, eps=1e-5):
         super(FrozenBatchNorm2d, self).__init__()
@@ -56,8 +49,6 @@ class FrozenBatchNorm2d(torch.nn.Module):
             missing_keys, unexpected_keys, error_msgs)
 
     def forward(self, x):
-        # move reshapes to the beginning
-        # to make it fuser-friendly
         w = self.weight.reshape(1, -1, 1, 1)
         b = self.bias.reshape(1, -1, 1, 1)
         rv = self.running_var.reshape(1, -1, 1, 1)
@@ -76,7 +67,6 @@ class BackboneBase(nn.Module):
             if not train_backbone or 'layer2' not in name and 'layer3' not in name and 'layer4' not in name:
                 parameter.requires_grad_(False)
         if return_interm_layers:
-            # return_layers = {"layer1": "0", "layer2": "1", "layer3": "2", "layer4": "3"}
             return_layers = {"layer2": "0", "layer3": "1", "layer4": "2"}
             self.strides = [8, 16, 32]
             self.num_channels = [512, 1024, 2048]
@@ -98,7 +88,7 @@ class BackboneBase(nn.Module):
 
 
 class Backbone(BackboneBase):
-    """ResNet backbone with frozen BatchNorm."""
+    
     def __init__(self, name: str,
                  train_backbone: bool,
                  return_interm_layers: bool,

@@ -21,7 +21,6 @@ from torch import Tensor
 
 import colorsys
 
-# needed due to empty tensor bug in pytorch and torchvision 0.5
 import torchvision
 __torchvision_need_compat_flag = float(torchvision.__version__.split('.')[1]) < 7
 if __torchvision_need_compat_flag:
@@ -30,9 +29,6 @@ if __torchvision_need_compat_flag:
 
 
 class SmoothedValue(object):
-    """Track a series of values and provide access to smoothed values over a
-    window or the global series average.
-    """
 
     def __init__(self, window_size=20, fmt=None):
         if fmt is None:
@@ -48,9 +44,7 @@ class SmoothedValue(object):
         self.total += value * n
 
     def synchronize_between_processes(self):
-        """
-        Warning: does not synchronize the deque!
-        """
+
         if not is_dist_avail_and_initialized():
             return
         t = torch.tensor([self.count, self.total], dtype=torch.float64, device='cuda')
@@ -94,32 +88,21 @@ class SmoothedValue(object):
 
 
 def all_gather(data):
-    """
-    Run all_gather on arbitrary picklable data (not necessarily tensors)
-    Args:
-        data: any picklable object
-    Returns:
-        list[data]: list of data gathered from each rank
-    """
+
     world_size = get_world_size()
     if world_size == 1:
         return [data]
 
-    # serialized to a Tensor
     buffer = pickle.dumps(data)
     storage = torch.ByteStorage.from_buffer(buffer)
     tensor = torch.ByteTensor(storage).to("cuda")
 
-    # obtain Tensor size of each rank
     local_size = torch.tensor([tensor.numel()], device="cuda")
     size_list = [torch.tensor([0], device="cuda") for _ in range(world_size)]
     dist.all_gather(size_list, local_size)
     size_list = [int(size.item()) for size in size_list]
     max_size = max(size_list)
 
-    # receiving Tensor from all ranks
-    # we pad the tensor because torch all_gather does not support
-    # gathering tensors of different shapes
     tensor_list = []
     for _ in size_list:
         tensor_list.append(torch.empty((max_size,), dtype=torch.uint8, device="cuda"))
@@ -137,21 +120,14 @@ def all_gather(data):
 
 
 def reduce_dict(input_dict, average=True):
-    """
-    Args:
-        input_dict (dict): all the values will be reduced
-        average (bool): whether to do average or sum
-    Reduce the values in the dictionary from all processes so that all processes
-    have the averaged results. Returns a dict with the same fields as
-    input_dict, after reduction.
-    """
+
     world_size = get_world_size()
     if world_size < 2:
         return input_dict
     with torch.no_grad():
         names = []
         values = []
-        # sort the keys so that they are consistent across processes
+
         for k in sorted(input_dict.keys()):
             names.append(k)
             values.append(input_dict[k])
@@ -186,8 +162,7 @@ class MetricLogger(object):
     def __str__(self):
         loss_str = []
         for name, meter in self.meters.items():
-            # print(name, str(meter))
-            # import ipdb;ipdb.set_trace()
+
             if meter.count > 0:
                 loss_str.append(
                     "{}: {}".format(name, str(meter))
@@ -238,7 +213,7 @@ class MetricLogger(object):
         for obj in iterable:
             data_time.update(time.time() - end)
             yield obj
-            # import ipdb; ipdb.set_trace()
+
             iter_time.update(time.time() - end)
             if i % print_freq == 0 or i == len(iterable) - 1:
                 eta_seconds = iter_time.global_avg * (len(iterable) - i)
@@ -283,14 +258,14 @@ def get_sha():
 
 
 def collate_fn(batch):
-    # import ipdb; ipdb.set_trace()
+
     batch = list(zip(*batch))
     batch[0] = nested_tensor_from_tensor_list(batch[0])
     return tuple(batch)
 
 
 def _max_by_axis(the_list):
-    # type: (List[List[int]]) -> List[int]
+
     maxes = the_list[0]
     for sublist in the_list[1:]:
         for index, item in enumerate(sublist):
@@ -321,7 +296,7 @@ class NestedTensor(object):
         return res
 
     def to(self, device):
-        # type: (Device) -> NestedTensor # noqa
+
         cast_tensor = self.tensors.to(device)
         mask = self.mask
         if mask is not None:
@@ -339,11 +314,7 @@ class NestedTensor(object):
         return img
 
     def to_img_list(self):
-        """remove the padding and convert to img list
 
-        Returns:
-            [type]: [description]
-        """
         if self.tensors.dim() == 3:
             return self.to_img_list_single(self.tensors, self.mask)
         else:
@@ -373,16 +344,13 @@ class NestedTensor(object):
 
 
 def nested_tensor_from_tensor_list(tensor_list: List[Tensor]):
-    # TODO make this more general
+
     if tensor_list[0].ndim == 3:
         if torchvision._is_tracing():
-            # nested_tensor_from_tensor_list() does not export well to ONNX
-            # call _onnx_nested_tensor_from_tensor_list() instead
+
             return _onnx_nested_tensor_from_tensor_list(tensor_list)
 
-        # TODO make it support different-sized images
         max_size = _max_by_axis([list(img.shape) for img in tensor_list])
-        # min_size = tuple(min(s) for s in zip(*[img.shape for img in tensor_list]))
         batch_shape = [len(tensor_list)] + max_size
         b, c, h, w = batch_shape
         dtype = tensor_list[0].dtype
@@ -396,9 +364,6 @@ def nested_tensor_from_tensor_list(tensor_list: List[Tensor]):
         raise ValueError('not supported')
     return NestedTensor(tensor, mask)
 
-
-# _onnx_nested_tensor_from_tensor_list() is an implementation of
-# nested_tensor_from_tensor_list() that is supported by ONNX tracing.
 @torch.jit.unused
 def _onnx_nested_tensor_from_tensor_list(tensor_list: List[Tensor]) -> NestedTensor:
     max_size = []
@@ -407,10 +372,6 @@ def _onnx_nested_tensor_from_tensor_list(tensor_list: List[Tensor]) -> NestedTen
         max_size.append(max_size_i)
     max_size = tuple(max_size)
 
-    # work around for
-    # pad_img[: img.shape[0], : img.shape[1], : img.shape[2]].copy_(img)
-    # m[: img.shape[1], :img.shape[2]] = False
-    # which is not yet supported in onnx
     padded_imgs = []
     padded_masks = []
     for img in tensor_list:
@@ -474,16 +435,6 @@ def save_on_master(*args, **kwargs):
 
 def init_distributed_mode(args):
     if 'WORLD_SIZE' in os.environ and os.environ['WORLD_SIZE'] != '': # 'RANK' in os.environ and 
-        # args.rank = int(os.environ["RANK"])
-        # args.world_size = int(os.environ['WORLD_SIZE'])
-        # args.gpu = args.local_rank = int(os.environ['LOCAL_RANK'])
-
-        # launch by torch.distributed.launch
-        # Single node
-        #   python -m torch.distributed.launch --nproc_per_node=8 main.py --world-size 1 --rank 0 ...
-        # Multi nodes
-        #   python -m torch.distributed.launch --nproc_per_node=8 main.py --world-size 2 --rank 0 --dist-url 'tcp://IP_OF_NODE0:FREEPORT' ...
-        #   python -m torch.distributed.launch --nproc_per_node=8 main.py --world-size 2 --rank 1 --dist-url 'tcp://IP_OF_NODE0:FREEPORT' ...
 
         local_world_size = int(os.environ['WORLD_SIZE'])
         args.world_size = args.world_size * local_world_size
@@ -538,12 +489,7 @@ def accuracy(output, target, topk=(1,)):
 
 
 def interpolate(input, size=None, scale_factor=None, mode="nearest", align_corners=None):
-    # type: (Tensor, Optional[List[int]], Optional[float], str, Optional[bool]) -> Tensor
-    """
-    Equivalent to nn.functional.interpolate, but with support for empty batch sizes.
-    This will eventually be supported natively by PyTorch, and this
-    class can go away.
-    """
+
     if __torchvision_need_compat_flag < 0.7:
         if input.numel() > 0:
             return torch.nn.functional.interpolate(
@@ -582,6 +528,6 @@ def clean_state_dict(state_dict):
     new_state_dict = OrderedDict()
     for k, v in state_dict.items():
         if k[:7] == 'module.':
-            k = k[7:]  # remove `module.`
+            k = k[7:]  
         new_state_dict[k] = v
     return new_state_dict

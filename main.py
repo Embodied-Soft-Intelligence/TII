@@ -20,7 +20,7 @@ import torch.distributed as dist
 
 import datasets
 import util.misc as utils
-from datasets import build_dataset, get_coco_api_from_dataset
+from datasets import build_dataset
 from engine import evaluate, train_one_epoch
 from models import build_DABDETR, build_dab_deformable_detr
 from util.utils import clean_state_dict
@@ -160,15 +160,13 @@ def get_args_parser():
 
     # dataset parameters
     parser.add_argument('--dataset_file', default='vmrd')
-    parser.add_argument('--coco_path', default=r'F:/Data/COCO', type=str)
-    parser.add_argument('--coco_panoptic_path', type=str)
     parser.add_argument('--remove_difficult', action='store_true')
     parser.add_argument('--fix_size', action='store_true', 
                         help="Using for debug only. It will fix the size of input images to the maximum.")
 
 
     # Traing utils
-    parser.add_argument('--output_dir', default=r'/data/D2TriPO_DETR/results', 
+    parser.add_argument('--output_dir', default=r'/data/D2TriPO_DETR01/results', 
                         help='path where to save, empty for no saving')
     parser.add_argument('--note', default='', help='add some notes to the experiment')
     parser.add_argument('--device', default='cuda', help='device to use for training / testing')
@@ -217,18 +215,7 @@ def build_model_main(args):
 
 def main(args):
 
-    # wandb.login()
-    # wandb.init(
-    #     # project="debug", 
-    #     project="final", 
-    #     name=str('dab_def_resnet_5d_rotatt_point_QK_nobias'),
-    #     dir=args.output_dir,
-    # )
-    
     utils.init_distributed_mode(args)
-    # torch.autograd.set_detect_anomaly(True)
-    
-    # setup loggercode/dab_deformable_resnet_5d_Rotate_Point
     os.makedirs(args.output_dir, exist_ok=True)
     os.environ['output_dir'] = args.output_dir
     logger = setup_logger(output=os.path.join(args.output_dir, 'info.txt'), distributed_rank=args.rank, color=False, name="DAB-DETR")
@@ -307,14 +294,9 @@ def main(args):
         else:
             checkpoint = torch.load(args.resume, map_location='cpu')
         model_without_ddp.load_state_dict(checkpoint['model'],strict=False)
-        # if not args.eval and 'optimizer' in checkpoint and 'lr_scheduler' in checkpoint and 'epoch' in checkpoint:
-        #     optimizer.load_state_dict(checkpoint['optimizer'])
-        #     lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
-        #     args.start_epoch = checkpoint['epoch'] + 1
 
         if not args.eval and 'optimizer' in checkpoint and 'lr_scheduler' in checkpoint and 'epoch' in checkpoint:
             optimizer.load_state_dict(checkpoint['optimizer'])
-            # 修改学习率
             for param_group in optimizer.param_groups:
                 param_group['lr'] = 1e-6
             lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
@@ -338,8 +320,6 @@ def main(args):
         _tmp_st = OrderedDict({k:v for k, v in clean_state_dict(checkpoint).items() if check_keep(k, _ignorekeywordlist)})
         _load_output = model_without_ddp.load_state_dict(_tmp_st, strict=False)
         logger.info(str(_load_output))
-        # import ipdb; ipdb.set_trace()
-
 
     if args.eval:
         os.environ['EVAL_FLAG'] = 'TRUE'
@@ -356,30 +336,13 @@ def main(args):
     if args.pred_train:
         checkpoint = torch.load(args.pred_train_dir, map_location='cpu')
 
-        # 创建一个新的 state_dict，排除不匹配的层（如 class_embed、bbox_embed 以及特定的 input_proj 层）
-        # layers_to_skip = [
-        #     'input_proj.0.0.weight',
-        #     'input_proj.1.0.weight',
-        #     'input_proj.2.0.weight',
-        #     'input_proj.3.0.weight'
-        # ]
-
-
         new_state_dict = {
             k: v for k, v in checkpoint['model'].items()
             if not k.startswith('class_embed') 
-            # and k not in layers_to_skip  # 排除指定的 input_proj 层
         }
 
-        # 加载修改后的 state_dict 到模型中
         missing_keys, unexpected_keys = model_without_ddp.load_state_dict(new_state_dict, strict=False)
 
-
-        # for name, param in model_without_ddp.named_parameters():
-        #     if not param.requires_grad:
-        #         print(name)   
-
-        # 打印 missing 和 unexpected keys
         if len(missing_keys) > 0:
             print(f'Missing Keys: {missing_keys}')
         print('-----------------------------------------------------')
@@ -397,7 +360,6 @@ def main(args):
             args.clip_max_norm, wo_class_error=wo_class_error, lr_scheduler=lr_scheduler, args=args, logger=(logger if args.save_log else None))
         if args.output_dir:
             checkpoint_paths = [output_dir / 'checkpoint.pth']
-            # extra checkpoint before LR drop and every 100 epochs
 
             checkpoint_paths.append(output_dir / f'checkpoint{epoch:04}.pth')
             for checkpoint_path in checkpoint_paths:
@@ -430,29 +392,6 @@ def main(args):
         if args.output_dir and utils.is_main_process():
             with (output_dir / "log.txt").open("a") as f:
                 f.write(json.dumps(log_stats) + "\n")
-            
-        # wandb.log({ "loss": train_stats['loss'],
-        #             "class_error": train_stats['class_error'],
-        #             "loss_ce": train_stats['loss_ce'],
-        #             "loss_bbox": train_stats['loss_bbox'],
-        #             "loss_giou": train_stats['loss_giou'],
-        #             "loss_adj": train_stats['loss_adj'],
-        #             "loss_ce_grasp": train_stats['loss_grasp_ce'],
-        #             "loss_grasp_angle": train_stats['loss_grasp_angle'],
-        #             "loss_grasp_ious": train_stats['loss_grasp_ious'],
-        #             "loss_grasp_box": train_stats['loss_grasp_box'],
-
-        #             "loss_test": test_stats['loss'],
-        #             "class_error_test": test_stats['class_error'],
-        #             "loss_ce_test": test_stats['loss_ce'],
-        #             "loss_bbox_test": test_stats['loss_bbox'],
-        #             "loss_giou_test": test_stats['loss_giou'],
-        #             "loss_adj_test": test_stats['loss_adj'],
-        #             "loss_ce_grasp_test": test_stats['loss_grasp_ce'],
-        #             "loss_grasp_angle_test": test_stats['loss_grasp_angle'],
-        #             "loss_grasp_ious_test": test_stats['loss_grasp_ious'],
-        #             "loss_grasp_box_test": test_stats['loss_grasp_box']
-        #            } )       
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))

@@ -7,11 +7,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 # ------------------------------------------------------------------------
 
-"""
-Transforms and data augmentation for both image + bbox.
-"""
 import random
-
 import PIL
 import torch
 import torchvision.transforms as T
@@ -32,22 +28,18 @@ def angle_between_points(x1, y1, x2, y2):
         angle = (2 * angle - 360) / 2
     else:
         angle = angle
-    
-    # angle [-pi/2, pi/2)
+
     return angle
 
 def calculate_angle(grasp_points):
     angles = []
     for points in grasp_points:
-        # 计算中心点坐标
         centerX = sum([p[0] for p in points]) / 4
         centerY = sum([p[1] for p in points]) / 4
 
-        # 计算第一个点和第二个点的中点坐标
         midX = (points[1][0] + points[2][0]) / 2
         midY = (points[1][1] + points[2][1]) / 2
 
-        # 使用 `angle_between_points` 函数计算角度
         angle = angle_between_points(centerX, centerY, midX, midY)
         angles.append(angle)
 
@@ -59,7 +51,6 @@ def crop(image, target, region):
     target = target.copy()
     i, j, h, w = region
 
-    # should we do something wrt the original size?
     target["size"] = torch.tensor([h, w])
 
     fields = ["labels", "area", "iscrowd"]
@@ -76,15 +67,10 @@ def crop(image, target, region):
         fields.append("boxes")
 
     if "masks" in target:
-        # FIXME should we update the area here if there are no boxes?
         target['masks'] = target['masks'][:, i:i + h, j:j + w]
         fields.append("masks")
 
-
-    # remove elements for which the boxes or masks that have zero area
     if "boxes" in target or "masks" in target:
-        # favor boxes selection when defining which elements to keep
-        # this is compatible with previous implementation
         if "boxes" in target:
             cropped_boxes = target['boxes'].reshape(-1, 2, 2)
             keep = torch.all(cropped_boxes[:, 1, :] > cropped_boxes[:, 0, :], dim=1)
@@ -116,7 +102,6 @@ def hflip(image, target):
     if "masks" in target:
         target['masks'] = target['masks'].flip(-1)
 
-    # 计算并更新角度
     angles = calculate_angle(target['grasp_points'])
     target['grasp_angles'] = torch.tensor(angles)
 
@@ -141,14 +126,12 @@ def vflip(image, target):
     if "masks" in target:
         target['masks'] = target['masks'].flip(-2)
 
-    # 计算并更新角度
     angles = calculate_angle(target['grasp_points'])
     target['grasp_angles'] = torch.tensor(angles)
 
     return flipped_image, target
 
 def resize(image, target, size, max_size=None):
-    # size can be min_size (scalar) or (w, h) tuple
 
     def get_size_with_aspect_ratio(image_size, size, max_size=None):
         w, h = image_size
@@ -193,7 +176,6 @@ def resize(image, target, size, max_size=None):
 
     if "grasp_points" in target:
         grasp_points = target["grasp_points"]
-        # 对 grasp_points 的每个点进行缩放
         scaled_grasp_points = grasp_points * torch.as_tensor([ratio_width, ratio_height])
         target["grasp_points"] = scaled_grasp_points
 
@@ -213,12 +195,10 @@ def resize(image, target, size, max_size=None):
 
 
 def pad(image, target, padding):
-    # assumes that we only pad on the bottom right corners
     padded_image = F.pad(image, (0, 0, padding[0], padding[1]))
     if target is None:
         return padded_image, None
     target = target.copy()
-    # should we do something wrt the original size?
     target["size"] = torch.tensor(padded_image.size[::-1])
     if "masks" in target:
         target['masks'] = torch.nn.functional.pad(target['masks'], (0, padding[0], 0, padding[1]))
@@ -306,10 +286,7 @@ class RandomPad(object):
 
 
 class RandomSelect(object):
-    """
-    Randomly selects between transforms1 and transforms2,
-    with probability p for transforms1 and (1 - p) for transforms2
-    """
+
     def __init__(self, transforms1, transforms2, p=0.5):
         self.transforms1 = transforms1
         self.transforms2 = transforms2
@@ -347,11 +324,6 @@ class Normalize(object):
         target = target.copy()
         h, w = image.shape[-2:]
 
-        # grasp_angles = target['grasp_angles']
-        # grasp_angles_cls = ((grasp_angles + 89.99) // 10).long()
-        # target['grasp_angles_cls'] = grasp_angles_cls
-
-
         if "grasp_points" in target:
             points = target['grasp_points']
             points = points / torch.tensor([w, h], dtype=torch.float32)
@@ -369,16 +341,7 @@ class Normalize(object):
         return image, target
     
     def calculate_euclidean_distance(self, points):
-        """
-        计算每个矩形的相邻顶点之间的欧几里得距离，包括最后一个顶点与第一个顶点的距离。
 
-        Args:
-        points (torch.Tensor): 形状为 (N, 4, 2) 的张量，表示 N 个矩形，每个矩形有 4 个顶点，每个顶点有 2 个坐标 (x, y)。
-
-        Returns:
-        torch.Tensor: 形状为 (N, 4) 的张量，表示每个矩形的点之间的距离。
-        """
-        # 计算相邻点之间的距离
         distances = torch.sqrt(torch.sum((points - torch.roll(points, shifts=-1, dims=1)) ** 2, dim=-1))
         return distances
 

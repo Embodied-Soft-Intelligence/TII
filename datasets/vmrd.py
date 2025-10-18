@@ -67,7 +67,6 @@ class CustomDataset(Dataset):
         boxes = torch.tensor(boxes, dtype=torch.float32)
         size = torch.tensor(size, dtype=torch.int64)
 
-        # 处理 label_path_2
         adj_matrix = []
         try:
             with open(label_path_2, 'r') as f:
@@ -83,15 +82,12 @@ class CustomDataset(Dataset):
         
         adj_matrix = torch.tensor(adj_matrix, dtype=torch.int32)
 
-
-        # 处理 label_path_3
         grasp_points = []
         grasp_difficulty = []
         grasp_widths = []
         grasp_classes = []
         grasp_angles = []
         grasp_heights = []
-        # grasp_angles_cls = []
         try:
             with open(label_path_3, 'r') as f:
                 for line in f:
@@ -102,19 +98,12 @@ class CustomDataset(Dataset):
                         grasp_coords = list(map(float, parts[:8]))
                         points = [(grasp_coords[i], grasp_coords[i+1]) for i in range(0, len(grasp_coords), 2)]
 
-                        # Calculate center point of the rectangle
                         centerX = sum([p[0] for p in points]) / 4
                         centerY = sum([p[1] for p in points]) / 4
 
-                        # Calculate midpoint of the 0th and 2nd points
                         midX = (points[1][0] + points[2][0]) / 2
                         midY = (points[1][1] + points[2][1]) / 2
 
-                        # Calculate Euclidean distance between 0th and 1st points
-                        # distance_0_1 = self.calculate_euclidean_distance(points[0][0], points[0][1], points[1][0], points[1][1])
-                        # distance_1_2 = self.calculate_euclidean_distance(points[1][0], points[1][1], points[2][0], points[2][1])
-
-                        # Calculate the angle between the line and the horizontal axis
                         angle = self.angle_between_points(centerX, centerY, midX, midY)
 
                         grasp_id = int(parts[-1])
@@ -125,8 +114,6 @@ class CustomDataset(Dataset):
                         grasp_angles.append(angle)
                         grasp_classes.append(grasp_id)
                         grasp_difficulty.append(difficulty)
-                        # grasp_widths.append(distance_0_1)
-                        # grasp_heights.append(distance_1_2)
 
                     except ValueError as e:
                         print(f"Error parsing line in {label_path_3}: {line.strip()} - {e}")
@@ -140,9 +127,6 @@ class CustomDataset(Dataset):
         grasp_difficulties = torch.tensor(grasp_difficulty, dtype=torch.int64)
         grasp_widths = torch.tensor(grasp_widths, dtype=torch.float32)
         grasp_heights = torch.tensor(grasp_heights, dtype=torch.float32)
-        # grasp_angles_cls = ((grasp_angles + 89.99) // 10).long()
-        # grasp_angles_cls = torch.tensor(grasp_angles_cls, dtype=torch.int64)
-        # 去掉图片编号中的扩展名并转换为 Tensor 格式
         image_id = os.path.splitext(image_file)[0]
         image_id_numeric = torch.tensor(int(image_id))
 
@@ -159,7 +143,6 @@ class CustomDataset(Dataset):
             'grasp_heights': grasp_heights,
             'orig_size': size,
             'size': size
-            # 'grasp_angles_cls': grasp_angles_cls
         }
 
         image = Image.open(image_path).convert('RGB')
@@ -189,8 +172,7 @@ class CustomDataset(Dataset):
             angle = (2 * angle - 360) / 2
         else:
             angle = angle
-        
-        # angle (-pi/2, pi/2]
+
         return angle
     
     def calculate_euclidean_distance(self, x1, y1, x2, y2):
@@ -205,20 +187,11 @@ def make_vmrd_transforms(image_set):
     ])
 
     scales = [480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800]
-    # scales = [768]
     if image_set == 'train':
         return T.Compose([
             T.RandomHorizontalFlip(),
             T.RandomVerticalFlip(),
             T.RandomResize(scales, max_size=1333),
-            # T.RandomSelect(
-            #     T.RandomResize(scales, max_size=1333),
-            #     T.Compose([
-            #         T.RandomResize([400, 500, 600]),
-            #         # T.RandomSizeCrop(384, 600),
-            #         T.RandomResize(scales, max_size=1333),
-            #     ])
-            # ),
             normalize,
         ])
 
@@ -237,11 +210,6 @@ def build(image_set):
         "val":  ('/data/VMRD/images/val', '/data/VMRD/labels/val','/data/VMRD/adj/val', '/data/VMRD/grasps/val'),
     }
 
-    # PATHS = {
-    #     "train": ('D:/Desktop/data/images/train', 'D:/Desktop/data/labels/train','D:/Desktop/data/adj/train', 'D:/Desktop/data/grasp/train'),
-    #     "val":  ('D:/Desktop/data/images/val', 'D:/Desktop/data/labels/val','D:/Desktop/data/adj/val', 'D:/Desktop/data/grasp/val'),
-    # }
-
     img_folder, label_folder, adj_folder, grasp_folder = PATHS[image_set]
     dataset= CustomDataset(img_folder , label_folder, adj_folder, grasp_folder, transform=make_vmrd_transforms(image_set))
     return dataset
@@ -252,38 +220,11 @@ def wh_calculate_euclidean_distance(x1, y1, x2, y2):
 
 
 def visualize_grasp_points(image, labels):
-    """
-    可视化抓取框中心点、框和其他相关标签。
-
-    参数：
-    - image_path: 图像的路径
-    - labels: 包含抓取相关信息的字典，格式如下：
-        {
-            'image_id': int,                 # 图像ID
-            'labels': List[int],             # 类别标签
-            'boxes': List[List[int]],        # 包围框坐标 [x_min, y_min, x_max, y_max]
-            'adj': np.array,                 # 邻接矩阵
-            'grasp_points': List[List[int]], # 抓取框中心点 [x, y]
-            'grasp_angles': List[float],     # 抓取角度
-            'grasp_classes': List[int],      # 抓取类别
-            'grasp_difficulties': List[int], # 抓取难度
-            'grasp_widths': List[int],       # 抓取宽度
-            'grasp_heights': List[int],      # 抓取高度
-            'orig_size': Tuple[int, int],    # 原始尺寸
-            'size': Tuple[int, int]          # 当前尺寸
-        }
-    """
-    # 读取图像
-    # image = Image.open(image_path).convert('RGB')
     draw = ImageDraw.Draw(image)
     
-    # 从标签中提取数据
     grasp_points = labels.get('grasp_points', [])
     grasp_angles = labels.get('grasp_angles', [])
-    # grasp_widths = labels.get('grasp_widths', [])
-    # grasp_heights = labels.get('grasp_heights', [])
 
-    # 遍历每个抓取点，进行可视化
     for i, (points, angle) in enumerate(zip(grasp_points, grasp_angles)):
 
         center_x = sum([p[0] for p in points]) / 4
@@ -293,7 +234,6 @@ def visualize_grasp_points(image, labels):
         cos_angle = math.cos(angle_rad)
         sin_angle = math.sin(angle_rad)
 
-        # 计算抓取框的四个顶点
         width = wh_calculate_euclidean_distance(points[0][0], points[0][1], points[1][0], points[1][1])
         height = wh_calculate_euclidean_distance(points[1][0], points[1][1], points[2][0], points[2][1])
 
@@ -307,7 +247,6 @@ def visualize_grasp_points(image, labels):
             (-half_width, half_height)
         ]
 
-        # 旋转顶点并平移至中心点
         rotated_corners = [
             (
                 center_x + x * cos_angle - y * sin_angle,
@@ -316,18 +255,14 @@ def visualize_grasp_points(image, labels):
             for x, y in corners
         ]
 
-        # 转换为整数并绘制多边形
         rotated_corners = [(int(x), int(y)) for x, y in rotated_corners]
         draw.polygon(rotated_corners, outline='green', width=2)
 
-        # 绘制抓取点的中心
         try:
             draw.ellipse((center_x - 3, center_y - 3, center_x + 3, center_y + 3), fill='red', outline='red')
         except Exception as e:
             print(f"Error drawing ellipse at center: {e}")
-            continue
 
-    # 显示图像
     plt.imshow(np.array(image))
     plt.axis('off')
     plt.show()

@@ -125,6 +125,9 @@ cd ./models/dab_deformable_detr/ops
 sh ./make.sh
 # unit test (should see all checking is True)
 python test.py
+# rorate
+cd ./cuda_op
+python setup.py install
 ```
 ---
 
@@ -171,6 +174,11 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node
 120 epoch training takes around 15 hours on a single machine with 4 RTX4090 cards. To ease reproduction of our results we provide results for the best checkpoint.pth for 120 epoch, achieving 88.6 accuracy.
 We train D2TriPO-DETR with the AdamW optimizer, using a learning rate of 1e-4 for the transformer and 1e-5 for the backbone, and a weight decay of 1e-4. Training uses a batch size of 4 for 120 epochs, with the learning rate dropped at epoch 80. Data augmentation includes horizontal flipping, random scaling, and random cropping. The transformer uses a dropout of 0.1, and gradient clipping with a maximum norm of 0.1 is applied to stabilize training.
 
+The command for training on a single GPU is as follows:
+
+```bash
+python main.py
+```
 ---
 
 ## Real-World Experiments

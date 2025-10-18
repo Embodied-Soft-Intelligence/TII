@@ -5,7 +5,6 @@ import os
 import sys
 from termcolor import colored
 
-
 class _ColorfulFormatter(logging.Formatter):
     def __init__(self, *args, **kwargs):
         self._root_name = kwargs.pop("root_name") + "."
@@ -25,8 +24,6 @@ class _ColorfulFormatter(logging.Formatter):
             return log
         return prefix + " " + log
 
-
-# so that calling setup_logger multiple times won't add many handlers
 @functools.lru_cache()
 def setup_logger(
     output=None, distributed_rank=0, *, color=True, name="imagenet", abbrev_name=None
@@ -54,7 +51,7 @@ def setup_logger(
         '[%(asctime)s.%(msecs)03d]: %(message)s',
         datefmt='%m/%d %H:%M:%S'
     )
-    # stdout logging: master only
+
     if distributed_rank == 0:
         ch = logging.StreamHandler(stream=sys.stdout)
         ch.setLevel(logging.DEBUG)
@@ -70,7 +67,6 @@ def setup_logger(
         ch.setFormatter(formatter)
         logger.addHandler(ch)
 
-    # file logging: all workers
     if output is not None:
         if output.endswith(".txt") or output.endswith(".log"):
             filename = output
@@ -87,9 +83,6 @@ def setup_logger(
 
     return logger
 
-
-# cache the opened file object, so that different calls to `setup_logger`
-# with the same file name can safely write to the same file.
 @functools.lru_cache(maxsize=None)
 def _cached_log_stream(filename):
     return open(filename, "a")

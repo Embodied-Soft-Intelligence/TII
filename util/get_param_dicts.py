@@ -19,7 +19,6 @@ def get_param_dict(args, model_without_ddp: nn.Module):
         param_dict_type = 'default'
     assert param_dict_type in ['default', 'ddetr_in_mmdet', 'large_wd']
 
-    # by default
     if param_dict_type == 'default':
         param_dicts = [
             {"params": [p for n, p in model_without_ddp.named_parameters() if "backbone" not in n and p.requires_grad]},
@@ -78,7 +77,5 @@ def get_param_dict(args, model_without_ddp: nn.Module):
                     "weight_decay": 0.0,
                 }
             ]
-
-        # print("param_dicts: {}".format(param_dicts))
 
     return param_dicts

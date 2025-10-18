@@ -11,9 +11,6 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 # ------------------------------------------------------------------------
 
-"""
-This file provides the definition of the convolutional heads used to predict masks, as well as the losses
-"""
 import io
 from collections import defaultdict
 
@@ -74,10 +71,6 @@ class DETRsegm(nn.Module):
 
 
 class MaskHeadSmallConv(nn.Module):
-    """
-    Simple convolutional head, using group norm.
-    Upsampling is done using a FPN approach
-    """
 
     def __init__(self, dim, fpn_dims, context_dim):
         super().__init__()
@@ -148,7 +141,6 @@ class MaskHeadSmallConv(nn.Module):
 
 
 class MHAttentionMap(nn.Module):
-    """This is a 2D attention module, which only returns the attention softmax (no multiplication by value)"""
 
     def __init__(self, query_dim, hidden_dim, num_heads, dropout=0, bias=True):
         super().__init__()
@@ -180,15 +172,7 @@ class MHAttentionMap(nn.Module):
 
 
 def dice_loss(inputs, targets, num_boxes):
-    """
-    Compute the DICE loss, similar to generalized IOU for masks
-    Args:
-        inputs: A float tensor of arbitrary shape.
-                The predictions for each example.
-        targets: A float tensor with the same shape as inputs. Stores the binary
-                 classification label for each element in inputs
-                (0 for the negative class and 1 for the positive class).
-    """
+
     inputs = inputs.sigmoid()
     inputs = inputs.flatten(1)
     numerator = 2 * (inputs * targets).sum(1)
@@ -198,21 +182,7 @@ def dice_loss(inputs, targets, num_boxes):
 
 
 def sigmoid_focal_loss(inputs, targets, num_boxes, alpha: float = 0.25, gamma: float = 2):
-    """
-    Loss used in RetinaNet for dense detection: https://arxiv.org/abs/1708.02002.
-    Args:
-        inputs: A float tensor of arbitrary shape.
-                The predictions for each example.
-        targets: A float tensor with the same shape as inputs. Stores the binary
-                 classification label for each element in inputs
-                (0 for the negative class and 1 for the positive class).
-        alpha: (optional) Weighting factor in range (0,1) to balance
-                positive vs negative examples. Default = -1 (no weighting).
-        gamma: Exponent of the modulating factor (1 - p_t) to
-               balance easy vs hard examples.
-    Returns:
-        Loss tensor
-    """
+
     prob = inputs.sigmoid()
     ce_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduction="none")
     p_t = prob * targets + (1 - prob) * (1 - targets)
@@ -249,29 +219,15 @@ class PostProcessSegm(nn.Module):
 
 
 class PostProcessPanoptic(nn.Module):
-    """This class converts the output of the model to the final panoptic result, in the format expected by the
-    coco panoptic API """
 
     def __init__(self, is_thing_map, threshold=0.85):
-        """
-        Parameters:
-           is_thing_map: This is a whose keys are the class ids, and the values a boolean indicating whether
-                          the class is  a thing (True) or a stuff (False) class
-           threshold: confidence threshold: segments with confidence lower than this will be deleted
-        """
+
         super().__init__()
         self.threshold = threshold
         self.is_thing_map = is_thing_map
 
     def forward(self, outputs, processed_sizes, target_sizes=None):
-        """ This function computes the panoptic prediction from the model's predictions.
-        Parameters:
-            outputs: This is a dict coming directly from the model. See the model doc for the content.
-            processed_sizes: This is a list of tuples (or torch tensors) of sizes of the images that were passed to the
-                             model, ie the size after data augmentation but before batching.
-            target_sizes: This is a list of tuples (or torch tensors) corresponding to the requested final size
-                          of each prediction. If left to None, it will default to the processed_sizes
-            """
+
         if target_sizes is None:
             target_sizes = processed_sizes
         assert len(processed_sizes) == len(target_sizes)
@@ -287,7 +243,6 @@ class PostProcessPanoptic(nn.Module):
         for cur_logits, cur_masks, cur_boxes, size, target_size in zip(
             out_logits, raw_masks, raw_boxes, processed_sizes, target_sizes
         ):
-            # we filter empty queries and detection below threshold
             scores, labels = cur_logits.softmax(-1).max(-1)
             keep = labels.ne(outputs["pred_logits"].shape[-1] - 1) & (scores > self.threshold)
             cur_scores, cur_classes = cur_logits.softmax(-1).max(-1)
@@ -300,8 +255,6 @@ class PostProcessPanoptic(nn.Module):
             h, w = cur_masks.shape[-2:]
             assert len(cur_boxes) == len(cur_classes)
 
-            # It may be that we have several predicted masks for the same stuff class.
-            # In the following, we track the list of masks ids for each stuff class (they are merged later on)
             cur_masks = cur_masks.flatten(1)
             stuff_equiv_classes = defaultdict(lambda: [])
             for k, label in enumerate(cur_classes):
@@ -309,19 +262,17 @@ class PostProcessPanoptic(nn.Module):
                     stuff_equiv_classes[label.item()].append(k)
 
             def get_ids_area(masks, scores, dedup=False):
-                # This helper function creates the final panoptic segmentation image
-                # It also returns the area of the masks that appears on the image
 
                 m_id = masks.transpose(0, 1).softmax(-1)
 
                 if m_id.shape[-1] == 0:
-                    # We didn't detect any mask :(
+
                     m_id = torch.zeros((h, w), dtype=torch.long, device=m_id.device)
                 else:
                     m_id = m_id.argmax(-1).view(h, w)
 
                 if dedup:
-                    # Merge the masks corresponding to the same stuff class
+
                     for equiv in stuff_equiv_classes.values():
                         if len(equiv) > 1:
                             for eq_id in equiv:
@@ -344,7 +295,7 @@ class PostProcessPanoptic(nn.Module):
 
             area, seg_img = get_ids_area(cur_masks, cur_scores, dedup=True)
             if cur_classes.numel() > 0:
-                # We know filter empty masks as long as we find some
+
                 while True:
                     filtered_small = torch.as_tensor(
                         [area[i] <= 4 for i, c in enumerate(cur_classes)], dtype=torch.bool, device=keep.device

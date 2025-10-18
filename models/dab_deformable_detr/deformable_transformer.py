@@ -153,9 +153,7 @@ class DeformableTransformer(nn.Module):
         """
         assert self.two_stage or query_embed_grasp is not None
         assert self.two_stage or query_embed is not None   
-        # assert self.two_stage or query_embed or query_embed_grasp is not None
 
-        # prepare input for encoder
         src_flatten = []
         mask_flatten = []
         lvl_pos_embed_flatten = []
@@ -165,30 +163,27 @@ class DeformableTransformer(nn.Module):
             spatial_shape = (h, w)
             spatial_shapes.append(spatial_shape)
 
-            src = src.flatten(2).transpose(1, 2)                # bs, hw, c
-            mask = mask.flatten(1)                              # bs, hw
-            pos_embed = pos_embed.flatten(2).transpose(1, 2)    # bs, hw, c
+            src = src.flatten(2).transpose(1, 2)            
+            mask = mask.flatten(1)                             
+            pos_embed = pos_embed.flatten(2).transpose(1, 2)    
             lvl_pos_embed = pos_embed + self.level_embed[lvl].view(1, 1, -1)
             lvl_pos_embed_flatten.append(lvl_pos_embed)
             src_flatten.append(src)
             mask_flatten.append(mask)
-        src_flatten = torch.cat(src_flatten, 1)     # bs, \sum{hxw}, c 
-        mask_flatten = torch.cat(mask_flatten, 1)   # bs, \sum{hxw}
+        src_flatten = torch.cat(src_flatten, 1)   
+        mask_flatten = torch.cat(mask_flatten, 1)  
         lvl_pos_embed_flatten = torch.cat(lvl_pos_embed_flatten, 1)
         spatial_shapes = torch.as_tensor(spatial_shapes, dtype=torch.long, device=src_flatten.device)
         level_start_index = torch.cat((spatial_shapes.new_zeros((1, )), spatial_shapes.prod(1).cumsum(0)[:-1]))
         valid_ratios = torch.stack([self.get_valid_ratio(m) for m in masks], 1)
 
-        # encoder
         memory = self.encoder(src_flatten, spatial_shapes, level_start_index, valid_ratios, lvl_pos_embed_flatten, mask_flatten)
-        # import ipdb; ipdb.set_trace()
 
-        # prepare input for decoder
+
         bs, _, c = memory.shape
         if self.two_stage:
             output_memory, output_proposals = self.gen_encoder_output_proposals(memory, mask_flatten, spatial_shapes)
 
-            # hack implementation for two-stage Deformable DETR
             enc_outputs_class = self.decoder.class_embed[self.decoder.num_layers](output_memory)
             enc_outputs_coord_unact = self.decoder.bbox_embed[self.decoder.num_layers](output_memory) + output_proposals
 
@@ -219,11 +214,9 @@ class DeformableTransformer(nn.Module):
             query_embed = query_embed.unsqueeze(0).expand(bs, -1, -1)
             tgt = tgt.unsqueeze(0).expand(bs, -1, -1)
             reference_points = self.reference_points(query_embed).sigmoid() 
-                # bs, num_quires, 2
+
             init_reference_out = reference_points
 
-        # decoder
-        # import ipdb; ipdb.set_trace()
         hs, inter_references, q, k = self.decoder(  
                                                     tgt, 
                                                     reference_points, 
@@ -235,8 +228,6 @@ class DeformableTransformer(nn.Module):
                                                     src_padding_mask=mask_flatten
                                                 )
 
-
-        # grasp
         hs_grasp, inter_references_grasp, inter_references_angle = self.decoder_grasp(tgt_grasp, 
                                                                     reference_points_grasp, 
                                                                     memory,
@@ -247,14 +238,10 @@ class DeformableTransformer(nn.Module):
                                                                     src_padding_mask=mask_flatten,
                                                                     reference_angle_grasp = reference_angle_grasp)
 
-
-        # memory_fine = F.interpolate(memory.permute(0, 2, 1), size=300, mode='linear', align_corners=False).permute(0, 2, 1)
-
-
         inter_references_out = inter_references
-        # grasp
+
         inter_references_out_grasp = inter_references_grasp     
-        # 5D
+
         inter_references_out_angle_grasp = inter_references_angle
         if self.two_stage:
             return hs, init_reference_out, inter_references_out, enc_outputs_class, enc_outputs_coord_unact
@@ -269,12 +256,10 @@ class DeformableTransformerEncoderLayer(nn.Module):
                  n_levels=4, n_heads=8, n_points=4):
         super().__init__()
 
-        # self attention
         self.self_attn = MSDeformAttn(d_model, n_levels, n_heads, n_points)
         self.dropout1 = nn.Dropout(dropout)
         self.norm1 = nn.LayerNorm(d_model)
 
-        # ffn
         self.linear1 = nn.Linear(d_model, d_ffn)
         self.activation = _get_activation_fn(activation)
         self.dropout2 = nn.Dropout(dropout)
@@ -293,7 +278,7 @@ class DeformableTransformerEncoderLayer(nn.Module):
         return src
 
     def forward(self, src, pos, reference_points, spatial_shapes, level_start_index, padding_mask=None):
-        # self attention
+
         src2 = self.self_attn(self.with_pos_embed(src, pos), reference_points, src, spatial_shapes, level_start_index, padding_mask)
         src = src + self.dropout1(src2)
         src = self.norm1(src)
@@ -326,20 +311,9 @@ class DeformableTransformerEncoder(nn.Module):
         return reference_points
 
     def forward(self, src, spatial_shapes, level_start_index, valid_ratios, pos=None, padding_mask=None):
-        """
-        Input:
-            - src: [bs, sum(hi*wi), 256]
-            - spatial_shapes: h,w of each level [num_level, 2]
-            - level_start_index: [num_level] start point of level in sum(hi*wi).
-            - valid_ratios: [bs, num_level, 2]
-            - pos: pos embed for src. [bs, sum(hi*wi), 256]
-            - padding_mask: [bs, sum(hi*wi)]
-        Intermedia:
-            - reference_points: [bs, sum(hi*wi), num_lebel, 2]
-        """
+
         output = src
-        # bs, sum(hi*wi), 256
-        # import ipdb; ipdb.set_trace()
+
         reference_points = self.get_reference_points(spatial_shapes, valid_ratios, device=src.device)
         for _, layer in enumerate(self.layers):
             output = layer(output, pos, reference_points, spatial_shapes, level_start_index, padding_mask)
@@ -353,17 +327,14 @@ class DeformableTransformerDecoderLayer(nn.Module):
                  n_levels=4, n_heads=8, n_points=4):
         super().__init__()
 
-        # cross attention
         self.cross_attn = MSDeformAttn(d_model, n_levels, n_heads, n_points)
         self.dropout1 = nn.Dropout(dropout)
         self.norm1 = nn.LayerNorm(d_model)
 
-        # self attention
         self.self_attn = nn.MultiheadAttention(d_model, n_heads, dropout=dropout)
         self.dropout2 = nn.Dropout(dropout)
         self.norm2 = nn.LayerNorm(d_model)
 
-        # ffn
         self.linear1 = nn.Linear(d_model, d_ffn)
         self.activation = _get_activation_fn(activation)
         self.dropout3 = nn.Dropout(dropout)
@@ -382,7 +353,7 @@ class DeformableTransformerDecoderLayer(nn.Module):
         return tgt
 
     def forward(self, tgt, query_pos, reference_points, src, src_spatial_shapes, level_start_index, src_padding_mask=None, reference_angle_grasp=None):
-        # self attention
+
         q = k = self.with_pos_embed(tgt, query_pos)
         tgt2 = self.self_attn(q.transpose(0, 1), k.transpose(0, 1), tgt.transpose(0, 1))[0].transpose(0, 1)
         tgt = tgt + self.dropout2(tgt2)
@@ -390,7 +361,7 @@ class DeformableTransformerDecoderLayer(nn.Module):
 
 
         if reference_angle_grasp is None:
-            # cross attention
+
             tgt2 = self.cross_attn(self.with_pos_embed(tgt, query_pos),
                                 reference_points,
                                 src, src_spatial_shapes, level_start_index, src_padding_mask)
@@ -403,15 +374,12 @@ class DeformableTransformerDecoderLayer(nn.Module):
         tgt = tgt + self.dropout1(tgt2)
         tgt = self.norm1(tgt)
 
-        # ffn
         tgt = self.forward_ffn(tgt)
 
         if reference_angle_grasp is not None:
             return tgt
         else:
             return tgt, q, k
-        # return tgt
-
 
 class DeformableTransformerDecoder(nn.Module):
     def __init__(self, decoder_layer, num_layers, return_intermediate=False, use_dab=False, d_model=256, high_dim_query_update=False, no_sine_embed=False):
@@ -419,7 +387,6 @@ class DeformableTransformerDecoder(nn.Module):
         self.layers = _get_clones(decoder_layer, num_layers)
         self.num_layers = num_layers
         self.return_intermediate = return_intermediate
-        # hack implementation for iterative bounding box refinement and two-stage Deformable DETR
         self.bbox_embed = None
         self.class_embed = None
         self.angle_embed = None
@@ -445,11 +412,10 @@ class DeformableTransformerDecoder(nn.Module):
         if self.use_dab:
             assert query_pos is None
         bs = src.shape[0]
-        reference_points = reference_points[None].repeat(bs, 1, 1) # bs, nq, 4(xywh)
+        reference_points = reference_points[None].repeat(bs, 1, 1)
         if reference_angle_grasp is not None:
             reference_angle_grasp = reference_angle_grasp[None].repeat(bs, 1, 1)
-            # reference_angle_grasp_input = reference_angle_grasp.unsqueeze(2)     
-            # reference_angle_grasp_input = reference_angle_grasp_input.expand(-1, -1, 4, -1)
+
         else:
             reference_angle_grasp_input = None
 
@@ -459,10 +425,10 @@ class DeformableTransformerDecoder(nn.Module):
         intermediate_query = []
         intermediate_key = []
         for lid, layer in enumerate(self.layers):
-            # import ipdb; ipdb.set_trace()
+
             if reference_points.shape[-1] == 4:
                 reference_points_input = reference_points[:, :, None] \
-                                         * torch.cat([src_valid_ratios, src_valid_ratios], -1)[:, None] # bs, nq, 4, 4
+                                         * torch.cat([src_valid_ratios, src_valid_ratios], -1)[:, None] 
             else:
                 assert reference_points.shape[-1] == 2
                 reference_points_input = reference_points[:, :, None] * src_valid_ratios[:, None]
@@ -473,17 +439,17 @@ class DeformableTransformerDecoder(nn.Module):
                 _,max_indice=torch.max(reference_angle_grasp_input,-1)
 
             if self.use_dab:
-                # import ipdb; ipdb.set_trace()
+
                 if self.no_sine_embed:
                     raw_query_pos = self.ref_point_head(reference_points_input)
                 else:
-                    query_sine_embed = gen_sineembed_for_position(reference_points_input[:, :, 0, :]) # bs, nq, 256*2 
+                    query_sine_embed = gen_sineembed_for_position(reference_points_input[:, :, 0, :]) 
                     if reference_angle_grasp is not None:
                         angle_sine_embed = gen_sineembed_for_angle(max_indice.unsqueeze(-1)[:,:,0,:])
                         query_sine_embed = torch.cat((query_sine_embed,angle_sine_embed),-1)
                         raw_query_pos = self.ref_5dpoint_head(query_sine_embed) 
                     else:
-                        raw_query_pos = self.ref_point_head(query_sine_embed) # bs, nq, 256
+                        raw_query_pos = self.ref_point_head(query_sine_embed)
                 pos_scale = self.query_scale(output) if lid != 0 else 1
                 query_pos = pos_scale * raw_query_pos
             if self.high_dim_query_update and lid != 0:
@@ -496,14 +462,10 @@ class DeformableTransformerDecoder(nn.Module):
                 output, q, k = layer(output, query_pos, reference_points_input, src, src_spatial_shapes, 
                             src_level_start_index, src_padding_mask, reference_angle_grasp = reference_angle_grasp_input)
 
-            # hack implementation for iterative bounding box refinement
             if self.bbox_embed is not None:
                 tmp = self.bbox_embed[lid](output)
                 if self.angle_embed is not None:
                     new_reference_angle = self.angle_embed[lid](output)
-                    # tmp_angle = self.angle_embed[lid](output)
-                    # new_reference_angle = torch.mul(tmp_angle, inverse_sigmoid(reference_angle_grasp)).sigmoid()
-                    # new_reference_angle = ((1 - 0.7) * tmp_angle + 0.7 * inverse_sigmoid(reference_angle_grasp)).sigmoid()
 
                 if reference_points.shape[-1] == 4:
                     new_reference_points = tmp + inverse_sigmoid(reference_points)
@@ -569,7 +531,6 @@ def build_deforamble_transformer(args):
 
 
 class MLP(nn.Module):
-    """ Very simple multi-layer perceptron (also called FFN)"""
 
     def __init__(self, input_dim, hidden_dim, output_dim, num_layers):
         super().__init__()
@@ -583,8 +544,7 @@ class MLP(nn.Module):
         return x
 
 def gen_sineembed_for_position(pos_tensor):
-    # n_query, bs, _ = pos_tensor.size()
-    # sineembed_tensor = torch.zeros(n_query, bs, 256)
+
     scale = 2 * math.pi
     dim_t = torch.arange(128, dtype=torch.float32, device=pos_tensor.device)
     dim_t = 10000 ** (2 * (dim_t // 2) / 128)
@@ -611,8 +571,7 @@ def gen_sineembed_for_position(pos_tensor):
     return pos
 
 def gen_sineembed_for_angle(pos_tensor):
-    # n_query, bs, _ = pos_tensor.size()
-    # sineembed_tensor = torch.zeros(n_query, bs, 256)
+
     scale = 2 * math.pi
     dim_t = torch.arange(128, dtype=torch.float32, device=pos_tensor.device)
     dim_t = 10000 ** (2 * (dim_t // 2) / 128)
