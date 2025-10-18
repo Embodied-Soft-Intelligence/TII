@@ -166,12 +166,12 @@ code_root/
 
 ### Training
 
-To train the baseline D2TriPO-DETR on a single node with 4 GPUs for 120 epochs, first modify the dataset path in `./datasets/vmrd.py`, then download the [resnet101_doubledetr] weight file and place it in the project root directory, and finally run the following command:
+To train the baseline D2TriPO-DETR on a single node with 4 GPUs for 120 epochs, first modify the dataset path in `./datasets/vmrd.py`, then download the [resnet101_doubledetr](https://drive.google.com/file/d/1AHhbgWUhpmpR2t3Q4XSuO6FvX-na-u5E/view?usp=drive_link) weight file and place it in the project root directory, and finally run the following command:
 
 ```bash
 CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node=4 --use_env main.py
 ```
-120 epoch training takes around 15 hours on a single machine with 4 RTX4090 cards. To ease reproduction of our results we provide results for the best checkpoint.pth for 120 epoch, achieving 88.6 accuracy.
+120 epoch training takes around 15 hours on a single machine with 4 RTX4090 cards. To ease reproduction of our results we provide [results](https://drive.google.com/file/d/1zzWPDbZ9_iApHUBZeaO5p6-Rs48jCv4G/view?usp=drive_link) for the best checkpoint.pth for 120 epoch, achieving 88.6 accuracy.
 We train D2TriPO-DETR with the AdamW optimizer, using a learning rate of 1e-4 for the transformer and 1e-5 for the backbone, and a weight decay of 1e-4. Training uses a batch size of 4 for 120 epochs, with the learning rate dropped at epoch 80. Data augmentation includes horizontal flipping, random scaling, and random cropping. The transformer uses a dropout of 0.1, and gradient clipping with a maximum norm of 0.1 is applied to stabilize training.
 
 The command for training on a single GPU is as follows:
@@ -196,7 +196,7 @@ The script `predict.py` connects to a **UR robotic arm** equipped with an **Inte
 
 ## Change Log
 
-See `changelog.md` for detailed logs of major changes.
+See [log](https://drive.google.com/file/d/1QNxz4lBXenbfMJAcSCJOY6_A_xyxbAom/view?usp=drive_link) for detailed logs of major changes.
 
 ## License
 
