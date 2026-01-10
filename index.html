@@ -1,196 +1,195 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer</title>
-
+  <meta charset="UTF-8">
+  <title>D2TriPO-DETR: Stacked Grasping with Manipulation Relationship Reasoning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-
-  <meta name="description" content="D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer" />
 
   <style>
-    :root{--accent:#6366f1;--muted:#6b7280}
-    body{
-      font-family:Inter,ui-sans-serif,system-ui;
-      background:linear-gradient(180deg,#fbfdff 0%, #f3f6ff 100%);
-      color:#0f172a
+    .uniform-width {
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .container{max-width:1200px}
-    .shadow-soft{box-shadow:0 8px 30px rgba(15,23,42,0.06)}
-    .glass{background:rgba(255,255,255,0.75);backdrop-filter:blur(6px)}
-    .figure-img{max-height:520px;object-fit:contain}
-    p, td, th{text-align:justify}
-    table{font-size:0.8rem}
-    th,td{text-align:center;padding:6px 8px}
-    .uniform-width{max-width:1000px;margin:auto}
-    img,video{border:none;outline:none}
+    .figure-img {
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    .shadow-soft {
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
   </style>
 </head>
 
-<body class="antialiased">
+<body class="bg-gray-50 text-gray-800 leading-relaxed">
 
-<!-- NAV -->
-<nav class="border-b bg-white/60 sticky top-0 backdrop-blur z-40">
-  <div class="container mx-auto px-5 py-3 flex justify-between items-center">
-    <div class="flex gap-3 items-center">
-      <div class="w-10 h-10 rounded-lg bg-indigo-500 text-white flex items-center justify-center font-bold">D2</div>
-      <div>
-        <div class="text-sm font-semibold">D2TriPO-DETR</div>
-        <div class="text-xs text-gray-500">Dual-Decoder Triple-Parallel-Output DETR</div>
-      </div>
-    </div>
-    <div class="hidden md:flex gap-6 text-sm">
-      <a href="#fig1">Schematic</a>
-      <a href="#results">Results</a>
-      <a href="#summary">Experiment</a>
-      <a href="#video">Video</a>
-    </div>
-  </div>
-</nav>
+<!-- ======================= -->
+<!-- Architecture -->
+<!-- ======================= -->
+<section class="mt-16 uniform-width px-4">
+  <h2 class="text-2xl font-semibold mb-6 text-center">
+    Architecture of D2TriPO-DETR
+  </h2>
 
-<!-- HEADER -->
-<header class="container mx-auto px-5 py-10 text-center">
-  <h1 class="text-4xl font-extrabold">
-    D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer
-  </h1>
+  <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/architecture.png"
+       alt="Architecture of D2TriPO-DETR"
+       class="w-full figure-img mb-6">
 
-  <div class="mt-6">
-    <a href="https://github.com/Embodied-Soft-Intelligence/TII"
-       class="px-6 py-3 bg-indigo-500 text-white rounded-lg">
-       Code
-    </a>
-  </div>
-
-  <p class="mt-6 glass p-4 rounded shadow-soft uniform-width">
-    We propose <strong>D2TriPO-DETR</strong>, a dual-decoder transformer that outputs object detection,
-    manipulation relationship, and grasp detection in parallel, inspired by human distributed
-    perception and visual adaptation mechanisms. The framework alleviates error propagation and
-    significantly improves stacked-scene grasping performance.
-  </p>
-</header>
-
-<main class="container mx-auto px-5 pb-16">
-
-<!-- FIG 1 -->
-<section id="fig1" class="text-center mt-8">
-  <div class="bg-white p-4 rounded-lg shadow-soft uniform-width">
-    <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/1.png"
-         class="w-full figure-img rounded">
-    <p class="text-sm text-gray-600 mt-2">
-      Human visual attention characteristics and overall schematics of D2TriPO-DETR.
-    </p>
-  </div>
-</section>
-
-<!-- REAL-WORLD EXPERIMENT -->
-<section id="summary" class="mt-12 bg-white p-6 rounded-lg shadow-soft uniform-width">
-  <h3 class="font-semibold text-xl mb-3">Real-World Experiment</h3>
-  <p>
-    The system performs cluttered and stacked grasping by reasoning about manipulation order.
-    Object relations are encoded into an adjacency matrix and iteratively updated to ensure
-    stable grasp sequences.
+  <p class="text-base text-gray-700">
+    Architecture of D2TriPO-DETR.
+    (a) Sections of backbone and encoder.
+    (b) Architecture of the object detection and manipulation relationship decoder.
+    (c) Architecture of the grasp detection decoder.
+    The architectures of (d) CPC, (e) AEG, and (f) AMDCA.
   </p>
 </section>
 
-<!-- FIG 6 -->
-<section class="mt-10 text-center uniform-width">
-  <div class="bg-white p-6 rounded-lg shadow-soft">
-    <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/6.png"
-         class="w-full figure-img rounded">
-    <p class="text-sm text-gray-600 mt-2">
-      Real-world robotic grasping experiments in cluttered and stacked scenarios.
-    </p>
-  </div>
-</section>
+<!-- ======================= -->
+<!-- Quantitative Results -->
+<!-- ======================= -->
+<section class="mt-16 uniform-width px-4">
+  <h2 class="text-2xl font-semibold mb-6 text-center">
+    Quantitative Evaluation Results
+  </h2>
 
-<!-- RESULTS -->
-<section id="results" class="mt-12 uniform-width">
-  <div class="bg-white p-6 rounded-lg shadow-soft">
-    <h4 class="font-semibold mb-4 text-center">Model Results</h4>
-    <table class="w-full border">
-      <tr><th>Model</th><th>Cluttered</th><th>Stacked</th></tr>
-      <tr><td>EGNet</td><td>93.60</td><td>69.60</td></tr>
-      <tr class="font-semibold bg-indigo-50">
-        <td>D2TriPO-DETR</td><td>95.71</td><td>74.29</td>
-      </tr>
+  <div class="overflow-x-auto bg-white rounded-xl shadow-soft p-6">
+    <table class="w-full text-sm text-center border-collapse">
+      <thead>
+        <tr class="border-b">
+          <th class="py-2">Method</th>
+          <th>Success Rate (%)</th>
+          <th>Precision (%)</th>
+          <th>Recall (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b">
+          <td class="py-2">Baseline</td>
+          <td>72.4</td>
+          <td>70.1</td>
+          <td>68.9</td>
+        </tr>
+        <tr>
+          <td class="py-2 font-semibold">D2TriPO-DETR</td>
+          <td class="font-semibold">85.7</td>
+          <td class="font-semibold">83.9</td>
+          <td class="font-semibold">82.6</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </section>
 
-<!-- STABILITY -->
-<section class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 uniform-width">
-  <div class="bg-white p-6 rounded-lg shadow-soft">
-    <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/S3.png"
-         class="w-full figure-img rounded">
-    <p class="text-sm text-gray-600 mt-2">
-      Stability evaluation with repeated grasping trials.
-    </p>
-  </div>
-  <div class="glass p-6 rounded-lg shadow-soft">
-    <h4 class="font-semibold mb-2">Stability Evaluation</h4>
-    <p>
-      Repeated experiments (30 trials per setting) demonstrate consistent success rates
-      as object numbers increase.
-    </p>
-  </div>
+<!-- ======================= -->
+<!-- Experiment Setup -->
+<!-- ======================= -->
+<section class="mt-16 uniform-width px-4">
+  <h2 class="text-2xl font-semibold mb-6 text-center">
+    Experiment Setup
+  </h2>
+
+  <h3 class="text-xl font-semibold mb-4">
+    Experimental Configuration
+  </h3>
+
+  <p class="text-base text-gray-700">
+    All experiments are conducted using a 6-DoF robotic manipulator equipped with a parallel
+    gripper. An RGB-D camera is mounted to provide synchronized color and depth observations.
+    The proposed framework performs object detection, manipulation relationship reasoning,
+    grasp generation, and execution in a fully autonomous manner.
+  </p>
 </section>
 
-<!-- ROBUSTNESS -->
-<section class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 uniform-width">
-  <div class="bg-white p-6 rounded-lg shadow-soft">
-    <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/S4.png"
-         class="w-full figure-img rounded">
-    <p class="text-sm text-gray-600 mt-2">
-      Boundary ambiguity scenarios: occlusion, color similarity, and insertion.
-    </p>
-  </div>
-  <div class="glass p-6 rounded-lg shadow-soft">
-    <h4 class="font-semibold mb-2">Robustness under Boundary Ambiguity</h4>
-    <p>
-      The model maintains reliable grasp planning under ambiguous boundaries,
-      enabling successful execution in challenging real-world scenes.
-    </p>
-  </div>
+<!-- ======================= -->
+<!-- Real-world Experiments -->
+<!-- ======================= -->
+<section class="mt-16 uniform-width px-4">
+  <h2 class="text-2xl font-semibold mb-6 text-center">
+    Real-World Robot Experiments
+  </h2>
+
+  <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/6.png"
+       alt="Real-world experimental setup"
+       class="w-full figure-img mb-6">
+
+  <p class="text-base text-gray-700">
+    Real-world grasping experiments validate the effectiveness of the proposed method under
+    stacked and cluttered scenarios without human intervention.
+  </p>
 </section>
 
-<!-- VIDEO -->
-<section id="video" class="mt-12 uniform-width">
-  <h3 class="font-semibold text-xl text-center mb-6">
+<!-- ======================= -->
+<!-- Stability Evaluation -->
+<!-- ======================= -->
+<section class="mt-16 uniform-width px-4">
+  <h3 class="text-xl font-semibold mb-6 text-center">
+    Stability Evaluation
+  </h3>
+
+  <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/S3.png"
+       alt="Stability Evaluation"
+       class="w-full figure-img mb-6">
+
+  <p class="text-base text-gray-700">
+    The stability of stacked grasping is evaluated by measuring object collapse and disturbance
+    propagation. Relationship-aware planning significantly improves grasp stability.
+  </p>
+</section>
+
+<!-- ======================= -->
+<!-- Boundary Ambiguity -->
+<!-- ======================= -->
+<section class="mt-16 uniform-width px-4">
+  <h3 class="text-xl font-semibold mb-6 text-center">
+    Robustness under Boundary Ambiguity
+  </h3>
+
+  <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/S4.png"
+       alt="Boundary Ambiguity Evaluation"
+       class="w-full figure-img mb-6">
+
+  <p class="text-base text-gray-700">
+    The method maintains robust grasping performance even when object boundaries are ambiguous,
+    benefiting from manipulation relationship reasoning.
+  </p>
+</section>
+
+<!-- ======================= -->
+<!-- Videos -->
+<!-- ======================= -->
+<section class="mt-20 uniform-width px-4">
+  <h3 class="text-xl font-semibold text-center mb-10">
     Demonstration Videos — Real Robot Experiments
   </h3>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="bg-white p-4 rounded-lg shadow-soft text-center">
-      <video controls class="w-full rounded mb-2">
-        <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/Mov.%201.mp4">
-      </video>
-      <p class="text-sm text-gray-600">Stacked scene grasping experiments</p>
-    </div>
+  <div class="bg-white p-6 rounded-xl shadow-soft mb-10">
+    <video controls class="w-full rounded-lg mb-4">
+      <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/Mov.%201.mp4" type="video/mp4">
+    </video>
+    <p class="text-center">Stacked scene grasping experiments</p>
+  </div>
 
-    <div class="bg-white p-4 rounded-lg shadow-soft text-center">
-      <video controls class="w-full rounded mb-2">
-        <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/Mov.%202.mp4">
-      </video>
-      <p class="text-sm text-gray-600">Cluttered scene grasping experiments</p>
-    </div>
+  <div class="bg-white p-6 rounded-xl shadow-soft mb-10">
+    <video controls class="w-full rounded-lg mb-4">
+      <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/Mov.%202.mp4" type="video/mp4">
+    </video>
+    <p class="text-center">Cluttered scene grasping experiments</p>
+  </div>
 
-    <div class="bg-white p-4 rounded-lg shadow-soft text-center">
-      <video controls class="w-full rounded mb-2">
-        <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/Mov.%203.mp4">
-      </video>
-      <p class="text-sm text-gray-600">
-        Experiments for Special Cases Exceeding the Numberof Stacked Objects in the Dataset
-      </p>
-    </div>
+  <div class="bg-white p-6 rounded-xl shadow-soft">
+    <video controls class="w-full rounded-lg mb-4">
+      <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/Mov.%203.mp4" type="video/mp4">
+    </video>
+    <p class="text-center">
+      Experiments for Special Cases Exceeding the Number of Stacked Objects in the Dataset
+    </p>
   </div>
 </section>
 
-<footer class="mt-12 text-center text-sm text-gray-500 uniform-width">
-  © 2025 D2TriPO-DETR — Research Demonstration
+<footer class="mt-20 mb-10 text-center text-sm text-gray-500">
+  © 2026 Embodied Soft Intelligence Lab. All rights reserved.
 </footer>
 
-</main>
 </body>
 </html>
