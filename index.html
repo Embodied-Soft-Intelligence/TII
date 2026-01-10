@@ -4,654 +4,193 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer</title>
-  <!-- Tailwind + Inter font for a clean, modern look -->
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
   <meta name="description" content="D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer" />
+
   <style>
     :root{--accent:#6366f1;--muted:#6b7280}
-    html,body{height:100%}
-    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,'Helvetica Neue',Arial; background:linear-gradient(180deg,#fbfdff 0%, #f3f6ff 100%); color:#0f172a}
-    .container{max-width:1200px} /* Increased from 1100px to 1200px */
+    body{
+      font-family:Inter,ui-sans-serif,system-ui;
+      background:linear-gradient(180deg,#fbfdff 0%, #f3f6ff 100%);
+      color:#0f172a
+    }
+    .container{max-width:1200px}
     .shadow-soft{box-shadow:0 8px 30px rgba(15,23,42,0.06)}
     .glass{background:rgba(255,255,255,0.75);backdrop-filter:blur(6px)}
     .figure-img{max-height:520px;object-fit:contain}
-    .caption{color:var(--muted);font-size:0.95rem}
-    /* responsive table niceties */
-    table th{background:#fbfbff}
-    /* Text justification */
-    p, td, th, .text-justify {text-align: justify;}
-    /* Consistent content width */
-    .content-width {
-      width: 100%;
-      max-width: 1000px; /* Increased from 900px to 1000px */
-      margin-left: auto;
-      margin-right: auto;
-    }
-    /* Ensure all content fits within the same width */
-    .uniform-width {
-      width: 100%;
-      max-width: 1000px; /* Increased from 900px to 1000px */
-      margin-left: auto;
-      margin-right: auto;
-    }
-    /* Table adjustments */
-    .table-container {
-      overflow-x: auto;
-    }
-    table {
-      min-width: 100%;
-      white-space: nowrap;
-      font-size: 0.8rem; /* Smaller font for tables */
-    }
-    th, td {
-      padding: 6px 8px; /* Reduced padding */
-      text-align: center;
-    }
-    /* Make table headers smaller */
-    table th {
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    /* Line break for table cells */
-    .line-break {
-      white-space: normal;
-      line-height: 1.2;
-    }
-    /* Specific column widths for success rates table */
-    .success-table th:first-child,
-    .success-table td:first-child {
-      width: 25%; /* Narrower first column */
-      min-width: 80px;
-    }
-    .success-table th:not(:first-child),
-    .success-table td:not(:first-child) {
-      width: 18.75%; /* Wider data columns */
-    }
-    /* Remove borders and outlines from images and videos */
-    img, video {
-      outline: none;
-      border: none;
-    }
-    /* Fallback styling for missing images */
-    .image-fallback {
-      background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #6366f1;
-      font-weight: 600;
-    }
-    /* Subtle border for image containers */
-    .image-container {
-      border-radius: 0.5rem;
-      overflow: hidden;
-    }
+    p, td, th{text-align:justify}
+    table{font-size:0.8rem}
+    th,td{text-align:center;padding:6px 8px}
+    .uniform-width{max-width:1000px;margin:auto}
+    img,video{border:none;outline:none}
   </style>
 </head>
-<body class="antialiased text-slate-900">
-  <!-- Top bar -->
-  <nav class="border-b bg-white/60 sticky top-0 backdrop-blur z-40">
-    <div class="container mx-auto px-5 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-soft">D2</div>
-        <div>
-          <div class="text-sm font-semibold">D2TriPO-DETR</div>
-          <div class="text-xs text-gray-500">Dual-Decoder Triple-Parallel-Output Detection Transformer</div>
-        </div>
-      </div>
-      <div class="hidden md:flex items-center gap-6 text-sm text-slate-700">
-        <a href="#fig1" class="hover:underline">Schematic</a>
-        <a href="#results" class="hover:underline">Results</a>
-        <a href="#summary" class="hover:underline">Real-World Experiment</a>
-        <a href="#video" class="hover:underline">Video</a>
+
+<body class="antialiased">
+
+<!-- NAV -->
+<nav class="border-b bg-white/60 sticky top-0 backdrop-blur z-40">
+  <div class="container mx-auto px-5 py-3 flex justify-between items-center">
+    <div class="flex gap-3 items-center">
+      <div class="w-10 h-10 rounded-lg bg-indigo-500 text-white flex items-center justify-center font-bold">D2</div>
+      <div>
+        <div class="text-sm font-semibold">D2TriPO-DETR</div>
+        <div class="text-xs text-gray-500">Dual-Decoder Triple-Parallel-Output DETR</div>
       </div>
     </div>
-  </nav>
-
-  <header class="container mx-auto px-5 py-10 text-center">
-    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer</h1>
-    
-    <!-- Buttons section -->
-    <div class="mt-6 flex justify-center">
-      <a href="https://github.com/Embodied-Soft-Intelligence/TII" class="px-6 py-3 bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-600 transition-colors">Code</a>
+    <div class="hidden md:flex gap-6 text-sm">
+      <a href="#fig1">Schematic</a>
+      <a href="#results">Results</a>
+      <a href="#summary">Experiment</a>
+      <a href="#video">Video</a>
     </div>
-    
-    <p class="mt-6 text-gray-700 leading-relaxed glass p-4 rounded shadow-soft text-justify content-width">Vision-based grasping, though widely employed for industrial and household applications, still struggles with object stacking scenarios. Current methods face three major challenges: <strong>1)</strong> limited inter-object relationship understanding, <strong>2)</strong> poor grasping adaptation across different viewpoints, and <strong>3)</strong> error propagation. Inspired by distributed perception and visual adaptation from the human visual attention system, we propose <strong>D2TriPO-DETR</strong>, a dual-decoder transformer with three outputs of which are object detection, manipulation relationship, and grasp detection， to address the above challenges. Specifically, a <strong>distributed attention perception module</strong> and a <strong>visual attention adaptation module</strong> are designed to address limited inter-object relationship understanding and poor grasping adaptation across different viewpoints. These two modules are respectively integrated into the two parallel decoders to output the triple results simultaneously, partly eliminating error propagation. The evaluation of the Visual Manipulation Relationship Dataset shows that D2TriPO-DETR outperforms existing state-of-the-art methods across all metrics, e.g., a 5.3% higher precision in object detection, a 6.7% image accuracy improvement in manipulation relationship, and a 1.5% higher accuracy in grasp detection. Real-world testing confirms D2TriPO-DETR's effectiveness in grasping stacked objects.</p>
-  </header>
+  </div>
+</nav>
 
-  <main class="container mx-auto px-5 pb-16">
+<!-- HEADER -->
+<header class="container mx-auto px-5 py-10 text-center">
+  <h1 class="text-4xl font-extrabold">
+    D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer
+  </h1>
 
-    <!-- Fig 1 -->
-    <section id="fig1" class="mt-8 text-center">
-      <div class="inline-block bg-white rounded-lg p-4 shadow-soft uniform-width image-container">
-        <!-- Using raw.githubusercontent.com for direct image access -->
-        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/1.png" 
-             alt="Fig.1: D2TriPO-DETR Architecture Schematic" 
-             class="w-full figure-img rounded"
-             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.1: Image not available';">
-        <p class="mt-2 text-sm text-gray-600">Human visual attention characteristics and the overall schematics of D2TriPO-DETR. (a) Schematics of human distributed perception and visual adaptation. (b) Key architecture of the model. (c) Outputs of the model. (d) Evaluation metrics of the model.</p>
-      </div>
-    </section>
+  <div class="mt-6">
+    <a href="https://github.com/Embodied-Soft-Intelligence/TII"
+       class="px-6 py-3 bg-indigo-500 text-white rounded-lg">
+       Code
+    </a>
+  </div>
 
-    <!-- Fig 3 -->
-    <section class="mt-8 text-center">
-      <div class="inline-block bg-white rounded-lg p-4 shadow-soft uniform-width image-container">
-        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/3.png" 
-             alt="Fig.3: Architecture of D2TriPO-DETR" 
-             class="w-full figure-img rounded"
-             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.3: Image not available';">
-        <p class="mt-2 text-sm text-gray-600">Architecture of D2TriPO-DETR. (a) Sections of backbone and encoder. (b) Architecture of the object detection and manipulation relationship decoder. (c) Architecture of the grasp detection decoder. The architectures of (d) CPC, (e) AEG, and (f) AMDCA.</p>
-      </div>
-    </section>
+  <p class="mt-6 glass p-4 rounded shadow-soft uniform-width">
+    We propose <strong>D2TriPO-DETR</strong>, a dual-decoder transformer that outputs object detection,
+    manipulation relationship, and grasp detection in parallel, inspired by human distributed
+    perception and visual adaptation mechanisms. The framework alleviates error propagation and
+    significantly improves stacked-scene grasping performance.
+  </p>
+</header>
 
-    <!-- New Tables Section -->
-    <section class="mt-12 uniform-width">
-      <h3 class="font-semibold text-xl text-center mb-6">Quantitative Evaluation Results</h3>
-      
-      <!-- First row of tables -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Object Detection<br>Comparison on VMRD</h4>
-          <div class="rounded overflow-hidden border table-container">
-            <table class="w-full">
-              <thead>
-                <tr>
-                  <th class="px-2 py-2 text-center">Models</th>
-                  <th class="px-2 py-2 text-center">Detection<br>Recall (%)</th>
-                  <th class="px-2 py-2 text-center">Detection<br>Precision (%)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">VSE[23]</td>
-                  <td class="px-2 py-2 text-center">89.2</td>
-                  <td class="px-2 py-2 text-center">90.2</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">GrRN[19]</td>
-                  <td class="px-2 py-2 text-center">91.9</td>
-                  <td class="px-2 py-2 text-center">94.8</td>
-                </tr>
-                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
-                  <td class="px-2 py-2 text-center">D2TriPO-DETR (Ours)</td>
-                  <td class="px-2 py-2 text-center">98.0</td>
-                  <td class="px-2 py-2 text-center">97.2</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+<main class="container mx-auto px-5 pb-16">
 
-        <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Manipulation Relationship<br>Comparison on VMRD</h4>
-          <div class="rounded overflow-hidden border table-container">
-            <table class="w-full">
-              <thead>
-                <tr>
-                  <th class="px-2 py-2 text-center">Models</th>
-                  <th class="px-2 py-2 text-center">OR (%)</th>
-                  <th class="px-2 py-2 text-center">OP (%)</th>
-                  <th class="px-2 py-2 text-center">IA (%)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Mutli-Task CNN[8]</td>
-                  <td class="px-2 py-2 text-center">86.0</td>
-                  <td class="px-2 py-2 text-center">88.8</td>
-                  <td class="px-2 py-2 text-center">67.1</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">VMRN-RN101[4]</td>
-                  <td class="px-2 py-2 text-center">85.4</td>
-                  <td class="px-2 py-2 text-center">85.5</td>
-                  <td class="px-2 py-2 text-center">65.8</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">VMRN-VGG101[4]</td>
-                  <td class="px-2 py-2 text-center">86.3</td>
-                  <td class="px-2 py-2 text-center">88.8</td>
-                  <td class="px-2 py-2 text-center">68.4</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">GVMRN-RF-RN101[24]</td>
-                  <td class="px-2 py-2 text-center">86.9</td>
-                  <td class="px-2 py-2 text-center">87.5</td>
-                  <td class="px-2 py-2 text-center">68.8</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">GVMRN-RF-VGG101[24]</td>
-                  <td class="px-2 py-2 text-center">88.7</td>
-                  <td class="px-2 py-2 text-center">89.5</td>
-                  <td class="px-2 py-2 text-center">70.2</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Adj-Net-RN50[7]</td>
-                  <td class="px-2 py-2 text-center">88.9</td>
-                  <td class="px-2 py-2 text-center">91.5</td>
-                  <td class="px-2 py-2 text-center">75.0</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Adj-Net-RN101[7]</td>
-                  <td class="px-2 py-2 text-center">89.8</td>
-                  <td class="px-2 py-2 text-center">91.5</td>
-                  <td class="px-2 py-2 text-center">77.3</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">GrRN[19]</td>
-                  <td class="px-2 py-2 text-center">91.2</td>
-                  <td class="px-2 py-2 text-center">93.1</td>
-                  <td class="px-2 py-2 text-center">78.0</td>
-                </tr>
-                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
-                  <td class="px-2 py-2 text-center">D2TriPO-DETR (Ours)</td>
-                  <td class="px-2 py-2 text-center">92.3</td>
-                  <td class="px-2 py-2 text-center">94.3</td>
-                  <td class="px-2 py-2 text-center">84.7</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+<!-- FIG 1 -->
+<section id="fig1" class="text-center mt-8">
+  <div class="bg-white p-4 rounded-lg shadow-soft uniform-width">
+    <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/1.png"
+         class="w-full figure-img rounded">
+    <p class="text-sm text-gray-600 mt-2">
+      Human visual attention characteristics and overall schematics of D2TriPO-DETR.
+    </p>
+  </div>
+</section>
 
-      <!-- Second row of tables -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Manipulation Relationship<br>IA-X Comparison on VMRD</h4>
-          <div class="rounded overflow-hidden border table-container">
-            <table class="w-full">
-              <thead>
-                <tr>
-                  <th class="px-2 py-2 text-center">Models</th>
-                  <th class="px-2 py-2 text-center">IA-2 (%)</th>
-                  <th class="px-2 py-2 text-center">IA-3 (%)</th>
-                  <th class="px-2 py-2 text-center">IA-4 (%)</th>
-                  <th class="px-2 py-2 text-center">IA-5 (%)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Mutli-Task CNN[8]</td>
-                  <td class="px-2 py-2 text-center">87.7</td>
-                  <td class="px-2 py-2 text-center">64.1</td>
-                  <td class="px-2 py-2 text-center">56.6</td>
-                  <td class="px-2 py-2 text-center">72.9</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">GVMRN-RF-RN101[24]</td>
-                  <td class="px-2 py-2 text-center">91.4</td>
-                  <td class="px-2 py-2 text-center">69.2</td>
-                  <td class="px-2 py-2 text-center">61.2</td>
-                  <td class="px-2 py-2 text-center">57.5</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">GVMRN-RF-VGG101[24]</td>
-                  <td class="px-2 py-2 text-center">92.9</td>
-                  <td class="px-2 py-2 text-center">70.3</td>
-                  <td class="px-2 py-2 text-center">63.8</td>
-                  <td class="px-2 py-2 text-center">60.3</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Adj-Net-RN50[7]</td>
-                  <td class="px-2 py-2 text-center">87.3</td>
-                  <td class="px-2 py-2 text-center">74.5</td>
-                  <td class="px-2 py-2 text-center">69.8</td>
-                  <td class="px-2 py-2 text-center">72.6</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Adj-Net-RN101[7]</td>
-                  <td class="px-2 py-2 text-center">88.7</td>
-                  <td class="px-2 py-2 text-center">75.2</td>
-                  <td class="px-2 py-2 text-center">75.0</td>
-                  <td class="px-2 py-2 text-center">76.7</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">GrRN[19]</td>
-                  <td class="px-2 py-2 text-center">92.3</td>
-                  <td class="px-2 py-2 text-center">76.6</td>
-                  <td class="px-2 py-2 text-center">74.5</td>
-                  <td class="px-2 py-2 text-center">74.3</td>
-                </tr>
-                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
-                  <td class="px-2 py-2 text-center">D2TriPO-DETR (Ours)</td>
-                  <td class="px-2 py-2 text-center">93.8</td>
-                  <td class="px-2 py-2 text-center">82.8</td>
-                  <td class="px-2 py-2 text-center">81.1</td>
-                  <td class="px-2 py-2 text-center">87.1</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+<!-- REAL-WORLD EXPERIMENT -->
+<section id="summary" class="mt-12 bg-white p-6 rounded-lg shadow-soft uniform-width">
+  <h3 class="font-semibold text-xl mb-3">Real-World Experiment</h3>
+  <p>
+    The system performs cluttered and stacked grasping by reasoning about manipulation order.
+    Object relations are encoded into an adjacency matrix and iteratively updated to ensure
+    stable grasp sequences.
+  </p>
+</section>
 
-        <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Grasp Detection<br>Comparison on VMRD</h4>
-          <div class="rounded overflow-hidden border table-container">
-            <table class="w-full">
-              <thead>
-                <tr>
-                  <th class="px-2 py-2 text-center">Models</th>
-                  <th class="px-2 py-2 text-center">Accuracy (%)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">FCGN[25]</td>
-                  <td class="px-2 py-2 text-center">54.5</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">VMRN[3]</td>
-                  <td class="px-2 py-2 text-center">70.5</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">SE-ResUNet[26]</td>
-                  <td class="px-2 py-2 text-center">81.2</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">GR-ConvNet[27]</td>
-                  <td class="px-2 py-2 text-center">82.7</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">TFGrasp[28]</td>
-                  <td class="px-2 py-2 text-center">83.3</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">SKGNet[29]</td>
-                  <td class="px-2 py-2 text-center">86.1</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">SPANet[30]</td>
-                  <td class="px-2 py-2 text-center">86.7</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">EGNet[5]</td>
-                  <td class="px-2 py-2 text-center">87.1</td>
-                </tr>
-                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
-                  <td class="px-2 py-2 text-center">D2TriPO-DETR (Ours)</td>
-                  <td class="px-2 py-2 text-center">88.6</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+<!-- FIG 6 -->
+<section class="mt-10 text-center uniform-width">
+  <div class="bg-white p-6 rounded-lg shadow-soft">
+    <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/6.png"
+         class="w-full figure-img rounded">
+    <p class="text-sm text-gray-600 mt-2">
+      Real-world robotic grasping experiments in cluttered and stacked scenarios.
+    </p>
+  </div>
+</section>
 
-      <!-- Third row of tables -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Grasp Detection Results<br>on Cornell Dataset</h4>
-          <div class="rounded overflow-hidden border table-container">
-            <table class="w-full">
-              <thead>
-                <tr>
-                  <th class="px-2 py-2 text-center">Models</th>
-                  <th class="px-2 py-2 text-center">Input</th>
-                  <th class="px-2 py-2 text-center">Accuracy (%)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">TFGrasp[28]</td>
-                  <td class="px-2 py-2 text-center">RGB</td>
-                  <td class="px-2 py-2 text-center">96.78</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">TFGrasp[28]</td>
-                  <td class="px-2 py-2 text-center">RGBD</td>
-                  <td class="px-2 py-2 text-center">97.99</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">DSNet[33]</td>
-                  <td class="px-2 py-2 text-center">RGBD</td>
-                  <td class="px-2 py-2 text-center">98.31</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Yang[34]</td>
-                  <td class="px-2 py-2 text-center">RGB</td>
-                  <td class="px-2 py-2 text-center">98.74</td>
-                </tr>
-                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
-                  <td class="px-2 py-2 text-center">D2TriPO-DETR (Ours)</td>
-                  <td class="px-2 py-2 text-center">RGB</td>
-                  <td class="px-2 py-2 text-center">98.87</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
+<!-- RESULTS -->
+<section id="results" class="mt-12 uniform-width">
+  <div class="bg-white p-6 rounded-lg shadow-soft">
+    <h4 class="font-semibold mb-4 text-center">Model Results</h4>
+    <table class="w-full border">
+      <tr><th>Model</th><th>Cluttered</th><th>Stacked</th></tr>
+      <tr><td>EGNet</td><td>93.60</td><td>69.60</td></tr>
+      <tr class="font-semibold bg-indigo-50">
+        <td>D2TriPO-DETR</td><td>95.71</td><td>74.29</td>
+      </tr>
+    </table>
+  </div>
+</section>
 
-    <!-- Experiment setup section -->
-    <section class="mt-12 uniform-width">
-      <h3 class="font-semibold text-xl text-center mb-6">Experiment setup</h3>
-      
-      <!-- Experiment setup description -->
-      <div class="glass p-6 rounded-lg shadow-soft mb-6">
-        <h4 class="font-semibold text-lg text-justify mb-4">Experimental Configuration</h4>
-        <p class="text-gray-700 leading-relaxed text-justify">Our experimental setup consists of a robotic arm with a parallel-jaw gripper and an overhead camera. We use a variety of household objects with different shapes, sizes, and textures to evaluate the system's performance in both cluttered and stacked scenarios. The system is tested under various lighting conditions and occlusion levels to assess its robustness in real-world environments.</p>
-      </div>
-      
-      <!-- New Robustness Experiments section -->
-      <div class="glass p-6 rounded-lg shadow-soft mb-6">
-        <h4 class="font-semibold text-lg text-justify mb-4">Robustness Experiments under Low-Light and Occlusion Conditions</h4>
-        <p class="text-gray-700 leading-relaxed text-justify">For the two typical scenarios of low-light and occlusion, we synthesize three levels of processed datasets ranging from mild to severe based on the original dataset and conduct training and evaluation on them. The model exhibits satisfactory robustness under both conditions.</p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-        <div class="bg-white rounded-lg p-4 shadow-soft text-center image-container">
-          <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/7.png" 
-               alt="Fig.7: Experiment Setup" 
-               class="w-full rounded figure-img"
-               onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.7: Image not available';">
-          <p class="mt-2 text-sm text-gray-600">Prediction visualization under low-light and occlusion.</p>
-        </div>
-        
-        <div class="bg-white p-6 rounded-lg shadow-soft">
-          <h4 class="font-semibold mb-4 text-center">Evaluation under<br>Low-Light & Occlusion</h4>
-          <div class="rounded overflow-hidden border table-container">
-            <table class="w-full">
-              <thead>
-                <tr>
-                  <th class="px-2 py-2 text-center">Dataset</th>
-                  <th class="px-2 py-2 text-center">Detection<br>Recall (%)</th>
-                  <th class="px-2 py-2 text-center">Detection<br>Precision (%)</th>
-                  <th class="px-2 py-2 text-center">IA (%)</th>
-                  <th class="px-2 py-2 text-center">Accuracy (%)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Lowlight L1</td>
-                  <td class="px-2 py-2 text-center">89.5</td>
-                  <td class="px-2 py-2 text-center">76.8</td>
-                  <td class="px-2 py-2 text-center">45.6</td>
-                  <td class="px-2 py-2 text-center">80.1</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Lowlight L2</td>
-                  <td class="px-2 py-2 text-center">82.7</td>
-                  <td class="px-2 py-2 text-center">74.1</td>
-                  <td class="px-2 py-2 text-center">33.1</td>
-                  <td class="px-2 py-2 text-center">78.6</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Lowlight L3</td>
-                  <td class="px-2 py-2 text-center">69.3</td>
-                  <td class="px-2 py-2 text-center">72.2</td>
-                  <td class="px-2 py-2 text-center">22.9</td>
-                  <td class="px-2 py-2 text-center">67.0</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Occlusion L1</td>
-                  <td class="px-2 py-2 text-center">98.0</td>
-                  <td class="px-2 py-2 text-center">97.1</td>
-                  <td class="px-2 py-2 text-center">82.0</td>
-                  <td class="px-2 py-2 text-center">85.4</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Occlusion L2</td>
-                  <td class="px-2 py-2 text-center">97.8</td>
-                  <td class="px-2 py-2 text-center">97.0</td>
-                  <td class="px-2 py-2 text-center">80.4</td>
-                  <td class="px-2 py-2 text-center">83.8</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-slate-50">
-                  <td class="px-2 py-2 text-center">Occlusion L3</td>
-                  <td class="px-2 py-2 text-center">96.9</td>
-                  <td class="px-2 py-2 text-center">96.1</td>
-                  <td class="px-2 py-2 text-center">79.8</td>
-                  <td class="px-2 py-2 text-center">83.1</td>
-                </tr>
-                <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
-                  <td class="px-2 py-2 text-center">Original dataset</td>
-                  <td class="px-2 py-2 text-center">98.0</td>
-                  <td class="px-2 py-2 text-center">97.2</td>
-                  <td class="px-2 py-2 text-center">84.7</td>
-                  <td class="px-2 py-2 text-center">88.6</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
+<!-- STABILITY -->
+<section class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 uniform-width">
+  <div class="bg-white p-6 rounded-lg shadow-soft">
+    <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/S3.png"
+         class="w-full figure-img rounded">
+    <p class="text-sm text-gray-600 mt-2">
+      Stability evaluation with repeated grasping trials.
+    </p>
+  </div>
+  <div class="glass p-6 rounded-lg shadow-soft">
+    <h4 class="font-semibold mb-2">Stability Evaluation</h4>
+    <p>
+      Repeated experiments (30 trials per setting) demonstrate consistent success rates
+      as object numbers increase.
+    </p>
+  </div>
+</section>
 
-    <!-- Real-World Experiment section -->
-    <section id="summary" class="mt-10 bg-white p-6 rounded-lg shadow-soft uniform-width">
-      <h4 class="font-semibold text-justify">Real-World Experiment</h4>
-      <p class="mt-3 text-gray-700 leading-relaxed text-justify">In the <strong>cluttered</strong> setting objects are placed separately to test detection among nearby items. The <strong>stacked</strong> setting introduces occlusions that require not only detection and grasp estimation but also reasoning about manipulation order to avoid failures. Our pipeline outputs detections, grasp candidates, and stacking relations in parallel; detections map to fixed queries to produce object indices and update an adjacency matrix P. If P is all-zero all objects are selectable; otherwise successive powers of P identify top-layer candidates. We keep grasp candidates with IoU &gt; 0.5, rank them by confidence, and execute high-confidence candidates via inverse kinematics with closed-loop verification, updating P after each grasp–place cycle. D2TriPO-DETR shows superior relation recognition and sequence-planning, enabling robust ordered grasping in stacked scenes.</p>
-    </section>
+<!-- ROBUSTNESS -->
+<section class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 uniform-width">
+  <div class="bg-white p-6 rounded-lg shadow-soft">
+    <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/S4.png"
+         class="w-full figure-img rounded">
+    <p class="text-sm text-gray-600 mt-2">
+      Boundary ambiguity scenarios: occlusion, color similarity, and insertion.
+    </p>
+  </div>
+  <div class="glass p-6 rounded-lg shadow-soft">
+    <h4 class="font-semibold mb-2">Robustness under Boundary Ambiguity</h4>
+    <p>
+      The model maintains reliable grasp planning under ambiguous boundaries,
+      enabling successful execution in challenging real-world scenes.
+    </p>
+  </div>
+</section>
 
-    <!-- Fig 8 centered with description -->
-    <section class="mt-10 text-center uniform-width">
-      <div class="bg-white rounded-lg p-6 shadow-soft image-container">
-        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/8.png" 
-             alt="Fig.8: Experimental Procedure" 
-             class="w-full figure-img rounded"
-             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.8: Image not available';">
-        <p class="mt-2 text-sm text-gray-600">Real-world robotic grasping performance in cluttered and stacked scenarios. In both settings, we test grasping with 2 to 5 objects, where all objects exhibit intra-class variations in color, shape, and brand.</p>
-        <p class="mt-4 text-gray-700 leading-relaxed text-justify">To evaluate applicability to real-world grasping, we test configurations with 2–5 objects. For each object count we run five trials in both cluttered and stacked settings, yielding 40 experiments in total.</p>
-      </div>
-    </section>
+<!-- VIDEO -->
+<section id="video" class="mt-12 uniform-width">
+  <h3 class="font-semibold text-xl text-center mb-6">
+    Demonstration Videos — Real Robot Experiments
+  </h3>
 
-    <!-- Tables side-by-side -->
-    <section id="results" class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6 uniform-width">
-      <div class="bg-white p-6 rounded-lg shadow-soft">
-        <h4 class="font-semibold mb-4 text-center">Model results</h4>
-        <div class="rounded overflow-hidden border table-container">
-          <table class="w-full">
-            <thead>
-              <tr>
-                <th class="px-2 py-2 text-center">Models</th>
-                <th class="px-2 py-2 text-center">Cluttered (%)</th>
-                <th class="px-2 py-2 text-center">Stacked (%)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="odd:bg-white even:bg-slate-50">
-                <td class="px-2 py-2 text-center">Mutli-Task CNN [8]</td>
-                <td class="px-2 py-2 text-center">90.60</td>
-                <td class="px-2 py-2 text-center">65.65</td>
-              </tr>
-              <tr class="odd:bg-white even:bg-slate-50">
-                <td class="px-2 py-2 text-center">SMTNet [30]</td>
-                <td class="px-2 py-2 text-center">86.13</td>
-                <td class="px-2 py-2 text-center">65.00</td>
-              </tr>
-              <tr class="odd:bg-white even:bg-slate-50">
-                <td class="px-2 py-2 text-center">EGNet [5]</td>
-                <td class="px-2 py-2 text-center">93.60</td>
-                <td class="px-2 py-2 text-center">69.60</td>
-              </tr>
-              <tr class="font-semibold bg-gradient-to-r from-indigo-50 to-white">
-                <td class="px-2 py-2 text-center">D2TriPO-DETR (Ours)</td>
-                <td class="px-2 py-2 text-center">95.71</td>
-                <td class="px-2 py-2 text-center">74.29</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white p-4 rounded-lg shadow-soft text-center">
+      <video controls class="w-full rounded mb-2">
+        <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/Mov.%201.mp4">
+      </video>
+      <p class="text-sm text-gray-600">Stacked scene grasping experiments</p>
+    </div>
 
-      <div class="bg-white p-6 rounded-lg shadow-soft">
-        <h4 class="font-semibold mb-4 text-center">Per-object success rates</h4>
-        <div class="rounded overflow-hidden border table-container">
-          <table class="w-full success-table">
-            <thead>
-              <tr>
-                <th class="px-2 py-2 text-center">Objects</th>
-                <th class="px-2 py-2 text-center">2</th>
-                <th class="px-2 py-2 text-center">3</th>
-                <th class="px-2 py-2 text-center">4</th>
-                <th class="px-2 py-2 text-center">5</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="odd:bg-white even:bg-slate-50">
-                <td class="px-2 py-2 text-center line-break">Cluttered<br>Scenes</td>
-                <td class="px-2 py-2 text-center">100.00%</td>
-                <td class="px-2 py-2 text-center">100.00%</td>
-                <td class="px-2 py-2 text-center">95.00%</td>
-                <td class="px-2 py-2 text-center">92.00%</td>
-              </tr>
-              <tr class="odd:bg-white even:bg-slate-50">
-                <td class="px-2 py-2 text-center line-break">Stacked<br>Scenes</td>
-                <td class="px-2 py-2 text-center">90.00%</td>
-                <td class="px-2 py-2 text-center">73.33%</td>
-                <td class="px-2 py-2 text-center">75.00%</td>
-                <td class="px-2 py-2 text-center">68.00%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+    <div class="bg-white p-4 rounded-lg shadow-soft text-center">
+      <video controls class="w-full rounded mb-2">
+        <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/Mov.%202.mp4">
+      </video>
+      <p class="text-sm text-gray-600">Cluttered scene grasping experiments</p>
+    </div>
 
-    <!-- Fig 9 + Fig 10 sections -->
-    <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-start uniform-width">
-      <div class="bg-white p-6 rounded-lg shadow-soft image-container">
-        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/9.png" 
-             alt="Fig.9: Stability Evaluation" 
-             class="w-full rounded figure-img"
-             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.9: Image not available';">
-        <p class="mt-2 text-sm text-gray-600">Repeated experiments with varying numbers of objects and the corresponding grasp success rates.</p>
-      </div>
-      <div class="glass p-6 rounded-lg shadow-soft">
-        <h4 class="font-semibold text-justify">Stability evaluation</h4>
-        <p class="mt-3 text-gray-700 leading-relaxed text-justify">We selected representative scenarios with 2–5 objects and repeated each 30 times. The system shows only a modest drop in success rate as object count increases, maintaining high and stable performance across scales.</p>
-      </div>
+    <div class="bg-white p-4 rounded-lg shadow-soft text-center">
+      <video controls class="w-full rounded mb-2">
+        <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/Mov.%203.mp4">
+      </video>
+      <p class="text-sm text-gray-600">
+        Experiments for Special Cases Exceeding the Numberof Stacked Objects in the Dataset
+      </p>
+    </div>
+  </div>
+</section>
 
-      <div class="order-last md:order-none bg-white p-6 rounded-lg shadow-soft image-container">
-        <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/10.png" 
-             alt="Fig.10: Robustness under Boundary Ambiguity" 
-             class="w-full rounded figure-img"
-             onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='Fig.10: Image not available';">
-        <p class="mt-2 text-sm text-gray-600">Model performance under boundary-ambiguous conditions: (a) severe occlusion, (b) similar colors, and (c) object insertion.</p>
-      </div>
-      <div class="glass p-6 rounded-lg shadow-soft">
-        <h4 class="font-semibold text-justify">Robustness under boundary ambiguity</h4>
-        <p class="mt-3 text-gray-700 leading-relaxed text-justify">Under severe occlusion, similar colors, and insertion cases we observe grasp success rates of roughly 65%, 70%, and 60% respectively. Although boundary ambiguity reduces performance, the model still detects objects and infers stacking relations for most scenes, enabling successful grasps.</p>
-      </div>
-    </section>
+<footer class="mt-12 text-center text-sm text-gray-500 uniform-width">
+  © 2025 D2TriPO-DETR — Research Demonstration
+</footer>
 
-    <!-- Video -->
-    <section id="video" class="mt-12 text-center uniform-width">
-      <div class="bg-white p-6 rounded-lg shadow-soft image-container">
-        <p class="text-sm text-gray-600 mb-3 text-justify">Demonstration video — real robot experiments</p>
-        <!-- Using raw.githubusercontent.com for direct video access -->
-        <video controls class="w-full rounded" style="min-height: 300px;">
-          <source src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/D2TriPO-DETR%20Dual-Decoder%20Triple-Parallel-Output%20Detection%20Transformer.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-    </section>
-
-    <footer class="mt-12 text-center text-sm text-gray-500 uniform-width">© 2025 D2TriPO-DETR — Research demonstration</footer>
-  </main>
-
+</main>
 </body>
 </html>
