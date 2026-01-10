@@ -5,7 +5,7 @@
 This repository is an official implementation of the paper [D2TriPO-DETR: Dual-Decoder Triple-Parallel-Output Detection Transformer](https://anonymous.4open.science/w/TII-D2TriPO-DETR/).
 
 <p align="center">
-  <img src="https://github.com/Embodied-Soft-Intelligence/TII/blob/main/picture/3.png" alt="Fig. 3" />
+  <img src="https://github.com/Embodied-Soft-Intelligence/TII/blob/main/picture/2.png" alt="Fig. 3" />
 </p>
 
 ---
