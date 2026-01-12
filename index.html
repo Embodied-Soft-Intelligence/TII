@@ -455,6 +455,20 @@
         <h4 class="font-semibold text-lg text-justify mb-4">Experimental Configuration</h4>
         <p class="text-gray-700 leading-relaxed text-justify">Our experimental setup consists of a robotic arm with a parallel-jaw gripper and an overhead camera. We use a variety of household objects with different shapes, sizes, and textures to evaluate the system's performance in both cluttered and stacked scenarios. The system is tested under various lighting conditions and occlusion levels to assess its robustness in real-world environments.</p>
       </div>
+
+      <!-- Robustness Experiments section -->
+      <div class="glass p-6 rounded-lg shadow-soft mb-6">
+        <h4 class="font-semibold text-lg text-justify mb-4">Robustness Experiments</h4>
+        <p class="text-gray-700 leading-relaxed text-justify mb-6">To systematically evaluate the model's performance under low-light and occlusion conditions, we first algorithmically synthesize gradient validation sets covering scenarios from normal to extreme degradation from the VMRD dataset, along with a mixed training set containing 25% synthetic data. Testing based on this demonstrates that, compared to training with only original data, adopting a mixed training strategy significantly improves model robustness—performance degradation is more gradual under low-light conditions, and all metrics remain highly stable under occlusion, effectively enhancing the model's adaptability to degraded scenarios.</p>
+        
+        <div class="bg-white rounded-lg p-6 shadow-soft image-container">
+          <img src="https://raw.githubusercontent.com/Embodied-Soft-Intelligence/TII/main/picture/S5.png"
+                alt="S5: Synthetic data visualization"
+                class="w-full figure-img rounded"
+               onerror="this.onerror=null; this.classList.add('image-fallback'); this.alt='S5: Image not available';">
+          <p class="mt-2 text-sm text-gray-600 text-center">Synthetic data visualization of the evaluation dataset. (a) Synthetic datasets with different low-light degraded levels. (b) Synthetic datasets with different occlusion degraded levels.</p>
+        </div>
+      </div>
     </section>
 
     <!-- Real-World Experiment section -->
