@@ -93,7 +93,7 @@ Vision-based grasping, though widely employed for industrial and household appli
 
 ## Real-World Experiment Results
 
-<div align="center"> <table> <tr> <th>Models</th> <th>Cluttered Scenes (%)</th> <th>Stacked Scenes (%)</th> </tr> <tr> <td>Mutli-Task CNN[8]</td> <td align="center">90.60</td> <td align="center">65.65</td> </tr> <tr> <td>SMTNet[35]</td> <td align="center">86.13</td> <td align="center">65.00</td> </tr> <tr> <td>EGNet[5]</td> <td align="center">93.60</td> <td align="center">69.60</td> </tr> <tr> <td><strong>D2TriPO-DETR (Ours)</strong></td> <td align="center"><strong>95.00 (95% CI: 87.8%-98.0%, n=80)</strong></td> <td align="center"><strong>88.75 (95% CI:80.0%-94.0%, n=80)</strong></td> </tr> </table> </div>
+<div align="center"> <table> <tr> <th>Models</th> <th>Cluttered Scenes (%)</th> <th>Stacked Scenes (%)</th> </tr> <tr> <td>Mutli-Task CNN[8]</td> <td align="center">90.60</td> <td align="center">65.65</td> </tr> <tr> <td>SMTNet[35]</td> <td align="center">86.13</td> <td align="center">65.00</td> </tr> <tr> <td>EGNet[5]</td> <td align="center">93.60</td> <td align="center">69.60</td> </tr> <tr> <td><strong>D2TriPO-DETR (Ours)</strong></td> <td align="center"><strong>95.00 (95% CI: 87.8%-98.0%, n=80)</strong></td> <td align="center"><strong>91.25 (95% CI:85.9%-94.7%, n=160)</strong></td> </tr> </table> </div>
 
 ---
 
